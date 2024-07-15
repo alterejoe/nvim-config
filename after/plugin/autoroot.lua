@@ -53,14 +53,16 @@ function Autoroot_v2()
 	local buffertype = vim.api.nvim_buf_get_option(0, "buftype")
 	local buffername = vim.api.nvim_buf_get_name(0)
 
-	local patterns = { ".git", "config.lua", ".env" }
+	local patterns = { ".git/", "config.lua", ".env/" }
 
 	local currentfilepath = vim.fn.expand("%:p")
 	print("Current path: " .. currentfilepath)
 	while true do
 		-- if patterns are found in the current directory then set the root to that directory
 		for _, pattern in ipairs(patterns) do
-			if vim.fn.findfile(pattern, currentfilepath) ~= "" then
+			local patternpath = currentfilepath .. "/" .. pattern
+
+			if vim.fn.isdirectory(patternpath) == 1 or vim.fn.filereadable(patternpath) == 1 then
 				vim.api.nvim_command("cd " .. currentfilepath)
 				print("Changed directory to " .. currentfilepath)
 				return
@@ -74,7 +76,6 @@ function Autoroot_v2()
 			print("No root directory found")
 			return
 		end
-		return
 	end
 end
 
