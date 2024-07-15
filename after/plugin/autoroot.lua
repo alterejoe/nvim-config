@@ -49,21 +49,17 @@ function AutoRoot()
 	end
 end
 
-function Autoroot_v2()
-	local buffertype = vim.api.nvim_buf_get_option(0, "buftype")
-	local buffername = vim.api.nvim_buf_get_name(0)
+function root(currentfilepath)
+	print("Current path: " .. currentfilepath)
 
 	local patterns = { ".git/", "config.lua", ".env/" }
-
-	local currentfilepath = vim.fn.expand("%:p")
-	print("Current path: " .. currentfilepath)
 	while true do
 		-- if patterns are found in the current directory then set the root to that directory
 		for _, pattern in ipairs(patterns) do
 			local patternpath = currentfilepath .. "/" .. pattern
 
 			if vim.fn.isdirectory(patternpath) == 1 or vim.fn.filereadable(patternpath) == 1 then
-				vim.api.nvim_command("cd " .. currentfilepath)
+				vim.fn.chdir(currentfilepath)
 				print("Changed directory to " .. currentfilepath)
 				return
 			end
@@ -71,7 +67,7 @@ function Autoroot_v2()
 
 		-- go up one directory
 		currentfilepath = vim.fn.fnamemodify(currentfilepath, ":h")
-
+		print("Looking at " .. currentfilepath)
 		if currentfilepath == "/" then
 			print("No root directory found")
 			return
@@ -79,13 +75,36 @@ function Autoroot_v2()
 	end
 end
 
+function fileroot(path)
+	root(path)
+end
+
+function acwriteroot(path)
+	-- remove oil:// from the start of the path
+	local cleanpath = string.gsub(path, "oil://", "")
+	root(cleanpath)
+end
 -- keybind for <leader>to use autodefault
 vim.keymap.set("n", "<leader>1", function()
-	Autoroot_v2()
+	local buffertype = vim.api.nvim_buf_get_option(0, "buftype")
+	if buffertype == "terminal" then
+		-- get the current directory of the terminal
+		local term_dir = vim.loop.cwd()
+		root(term_dir)
+		return
+	end
+	if buffertype == "acwrite" then
+		local path = vim.api.nvim_buf_get_name(0)
+		local pathdir = vim.fn.fnamemodify(path, ":h")
+		acwriteroot(pathdir)
+		return
+	end
+	local filedir = vim.fn.expand("%:p:h")
+	fileroot(filedir)
 end, { noremap = true, silent = true })
 
 -- set cwd to ~  with <C-2>
 vim.keymap.set("n", "<leader>2", function()
-	vim.api.nvim_command("cd ~")
+	vim.fn.chdir("~")
 	print("Set cwd to ~/")
 end)
