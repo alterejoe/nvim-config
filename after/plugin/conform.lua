@@ -1,8 +1,12 @@
 local conform = require("conform")
 
 conform.setup({
+	formatters = {},
 	formatters_by_ft = {
 		lua = { "stylua" },
+		python = { "autopep8" },
+		go = { "goimports" },
+		vimwiki = { "mdformat" },
 	},
 	default_formatters = { "efm" },
 })

@@ -26,15 +26,16 @@ cmp.setup({
 		["<C-b>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-space>"] = cmp.mapping.complete(),
-		["<C-e>"] = cmp.mapping.abort(),
+		["<esc>"] = cmp.mapping.abort(),
 		["<Tab>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+		["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+		["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 	}),
 	sources = cmp.config.sources({
-		{ name = "nvim_lsp", trigger_characters = { "-" } },
+		{ name = "nvim_lsp" },
+
+		-- { name = "copilot" },
 		{ name = "luasnip" }, -- For luasnip users.
-		-- { name = 'ultisnips' }, -- For ultisnips users.
-		-- { name = "vim-dadbod-completion" },
-		-- { name = 'snippy' }, -- For snippy users.
 		{ name = "buffer" },
 		{ name = "path" },
 		{ name = "treesitter" },

@@ -1,9 +1,17 @@
 vim.api.nvim_set_keymap("t", "jk", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true, silent = true })
 
+-- vim.api.nvim_set_keymap("t", "JK", "<C-\\><C-n>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("i", "JK", "<Esc>", { noremap = true, silent = true })
+
 vim.keymap.set("n", "Q", function()
 	local buftype = vim.bo.buftype
-	print(buftype)
+	local bufname = vim.fn.expand("%:t")
+
+	if bufname == "output" then
+		vim.api.nvim_command("q!")
+	end
+
 	local function writeSave()
 		vim.api.nvim_command("wq")
 	end
@@ -16,7 +24,6 @@ vim.keymap.set("n", "Q", function()
 			if filename == "" then
 				vim.api.nvim_command("q!")
 			else
-				vim.api.nvim_command("q")
 				vim.api.nvim_command("q")
 			end
 		end
@@ -46,7 +53,12 @@ vim.keymap.set("n", "W", function()
 	end
 end)
 
-vim.keymap.set("n", "ee", function()
-	vim.api.nvim_command("Oil --float")
+vim.keymap.set("n", "<leader>e", function()
+	vim.api.nvim_command("Oil")
 	-- <c-p> to open preview every time
+end)
+
+vim.keymap.set("n", "<leader>x", function()
+	vim.api.nvim_command("source %")
+	-- print("Sourced", os.time())
 end)
