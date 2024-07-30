@@ -35,3 +35,13 @@ vim.opt.clipboard = "unnamedplus"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 -- vim.opt.hidden = true
+--
+-- Disable line wrapping
+vim.o.wrap = false
+
+-- Ensure file encoding is UTF-8
+vim.o.encoding = "utf-8"
+
+-- Ensure hidden characters (like tabs) are displayed consistently
+vim.o.list = true
+vim.o.listchars = "tab:>-,trail:."

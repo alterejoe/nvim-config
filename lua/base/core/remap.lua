@@ -7,7 +7,7 @@ vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true, silent = true })
 vim.keymap.set("n", "Q", function()
 	local buftype = vim.bo.buftype
 	local bufname = vim.fn.expand("%:t")
-
+	print("buftype", buftype)
 	if bufname == "output" then
 		vim.api.nvim_command("q!")
 	end

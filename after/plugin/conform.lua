@@ -6,12 +6,12 @@ conform.setup({
 		lua = { "stylua" },
 		python = { "autopep8" },
 		go = { "goimports" },
-		vimwiki = { "prettier" },
-		-- ["*"] = { "codespell" },
-		-- -- Use the "_" filetype to run formatters on filetypes that don't
-		-- -- have other formatters configured.
-		-- ["_"] = { "trim_whitespace" },
+		vimwiki = { command = "prettier", args = { "--markdown-unordered-list-marker", "*" } },
 	},
+	-- ["*"] = { "codespell" },
+	-- -- Use the "_" filetype to run formatters on filetypes that don't
+	-- -- have other formatters configured.
+	-- ["_"] = { "trim_whitespace" },
 	default_formatters = { "efm" },
 })
 

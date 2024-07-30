@@ -11,7 +11,7 @@
 -- local function attach_runner() end
 local attach_runner = function(outputbuffer, pattern, command, header)
 	local jobid = nil
-
+	local partial_line = ""
 	vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 		group = vim.api.nvim_create_augroup("executer", { clear = true }),
 		pattern = pattern,
@@ -21,13 +21,26 @@ local attach_runner = function(outputbuffer, pattern, command, header)
 			end
 
 			local appenddata = function(_, data)
-				if data then
+				if partial_line ~= "" then
+					data[1] = partial_line .. data[1]
+					partial_line = ""
+				end
+				if data[#data]:sub(-1) ~= "\n" then
+					partial_line = data[#data]
+					table.remove(data)
+				end
+				if #data > 0 then
 					vim.api.nvim_buf_set_lines(outputbuffer, -1, -1, false, data)
 				end
+				-- if data then
+				-- 	vim.api.nvim_buf_set_lines(outputbuffer, -1, -1, false, data)
+				-- end
+				--
+				-- vim.api.nvim_command("normal! G")
 			end
 			vim.api.nvim_buf_set_lines(outputbuffer, 0, -1, false, header)
 			jobid = vim.fn.jobstart(command, {
-				stdout_buffered = true,
+				-- stdout_buffered = true,
 				on_stdout = appenddata,
 				on_stderr = appenddata,
 			})
@@ -98,9 +111,8 @@ vim.api.nvim_create_user_command("AutoExecute", function()
 		pythonpath = vim.g.python3_host_prog or "python"
 		attach_runner(outputbuffer, { "*.py" }, pythonpath .. " " .. currentfile, { "Interpreter:", pythonpath })
 	elseif filetype == "lua" then
-		attach_runner(outputbuffer, { "*.lua" }, "lua " .. currentfile, { "lua:", "" })
-
-		vim.cmd(":source %")
+		vim.cmd(":silent source %")
+		attach_runner(outputbuffer, { "*.lua" }, "nvim -l " .. currentfile, { "lua:", "" })
 	elseif filetype == "sh" then
 		attach_runner(outputbuffer, { "*.sh" }, "sh " .. currentfile, { "sh:", "" })
 	elseif filetype == "go" then

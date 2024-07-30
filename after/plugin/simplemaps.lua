@@ -1,0 +1,8 @@
+vim.keymap.set("n", "<leader>m", function()
+	-- print("This is working")
+	local messages = vim.api.nvim_exec("messages", true)
+	vim.api.nvim_command("vnew")
+	vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.split(messages, "\n"))
+	vim.api.nvim_buf_set_option(0, "buftype", "nofile")
+end, { noremap = true, silent = true })
+print("Testing")
