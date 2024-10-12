@@ -3,11 +3,11 @@ local function set_python_path()
 	local python_path
 
 	if cwd:match("zigbee") then
-		python_path = "/home/altjoe/miniconda3/envs/zigbee/bin/python"
+		python_path = "/home/jmeyer/miniconda3/envs/zigbee/bin/python"
 		-- elseif cwd:match("") then
 		-- 	python_path = "/path/to/project2/venv/bin/python"
 	else
-		python_path = "/home/altjoe/miniconda3/bin/python"
+		python_path = "/home/jmeyer/miniconda3/bin/python"
 	end
 
 	print("Setting python path to: " .. python_path)

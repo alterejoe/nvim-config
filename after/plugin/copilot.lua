@@ -1,7 +1,3 @@
-require("copilot").setup({
-	-- suggestion = { enabled = false },
-	-- panel = { enabled = false },
-})
 
 vim.keymap.set("n", "<leader>co", function()
 	-- Copilot !toggle

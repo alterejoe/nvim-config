@@ -7,9 +7,17 @@ vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true, silent = true })
 vim.keymap.set("n", "Q", function()
 	local buftype = vim.bo.buftype
 	local bufname = vim.fn.expand("%:t")
-	print("buftype", buftype)
+
+	print("buftype", buftype, "bufname", bufname)
 	if bufname == "output" then
-		vim.api.nvim_command("q!")
+		-- vim.api.nvim_command("q!")
+		-- close the buffer without saving
+		local bufnumber = vim.fn.bufnr("%")
+		print("bufnumber", bufnumber)
+		vim.api.nvim_buf_delete(bufnumber, { force = true })
+
+		-- vim.api.nvim_command("bd!")
+		return
 	end
 
 	local function writeSave()
@@ -35,7 +43,7 @@ vim.keymap.set("n", "Q", function()
 		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, true, true), "i", false)
 
 		-- term codes "<C-\\><C-n>"
-		vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "n", true)
+		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "n", true)
 		vim.api.nvim_command("bd!")
 	else --if vim.fn.winnr("$") == 1 or buftype == "dbout" then
 		vim.api.nvim_command("q")
@@ -46,7 +54,7 @@ vim.keymap.set("n", "W", function()
 	local buftype = vim.bo.buftype
 	local acceptyedbuf = { "", "acwrite" }
 	if vim.fn.index(acceptyedbuf, buftype) ~= -1 then
-		vim.api.nvim_command("w")
+		vim.api.nvim_command("w!")
 		print("Written", os.time())
 	else
 		print("Buftype is", buftype, "so not writing", os.time())

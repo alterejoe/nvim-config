@@ -1,0 +1,2 @@
+-- vim.g.vimwiki_global_ext = 0
+-- disable vimwiki CTRL-O and CTRL-I mappings

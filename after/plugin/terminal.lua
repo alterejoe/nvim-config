@@ -5,7 +5,9 @@ vim.keymap.set("n", "<leader>st", function()
 	-- if python is conda env then get the name of the conda env
 	if vim.g.python3_host_prog ~= nil then
 		if vim.g.python3_host_prog:find("conda") then
-			condaname = vim.g.python3_host_prog:match("envs/(%w+)")
+			-- split at last / and get the last element
+			-- condaname = vim.g.python3_host_prog
+			condaname = vim.g.python3_host_prog:match("/envs/(.-)/bin/python")
 		end
 	end
 

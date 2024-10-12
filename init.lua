@@ -1,4 +1,4 @@
-vim.opt.shell = "/usr/bin/fish"
+--vim.opt.shell = "/usr/bin/fish"
 USER = "base"
 -- vim.cmd("set verbose=20")
 
@@ -16,5 +16,6 @@ function SourceConfig()
 		vim.cmd("source " .. config)
 	end
 end
+
 require(USER .. ".core")
 require(USER .. ".lazy")
