@@ -7,7 +7,8 @@ conform.setup({
 		python = { "autopep8" },
 		go = { "goimports" },
 		vimwiki = { command = "prettier", args = { "--markdown-unordered-list-marker", "*" } },
-		json = { "jq" },
+		-- json = { "jq" },
+		javascript = { "prettier" },
 		-- json = { "jsonnetfmt" },
 	},
 	-- ["*"] = { "codespell" },
@@ -42,10 +43,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 -- autocommand for json files 	vim.cmd(":%!jq" .. personaPath .. personaFilename .. ".json")
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	group = "ConformAutogroup",
-	pattern = "*.json",
-	callback = function()
-		vim.cmd(":%!jq")
-	end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- 	group = "ConformAutogroup",
+-- 	pattern = "*.json",
+-- 	callback = function()
+-- 		vim.cmd(":%!jq")
+-- 	end,
+-- })

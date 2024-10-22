@@ -41,69 +41,107 @@ local createOutputBuffer = function(name)
 	return buffernum
 end
 
+local jobids = {}
 vim.api.nvim_create_user_command("AutoExecute", function()
 	SourceConfig()
 	local currentwindow = vim.api.nvim_get_current_win()
-	local current
-	cursor = vim.api.nvim_win_get_cursor(currentwindow)
+	local bufnr = vim.api.nvim_get_current_buf()
+	local cursor = vim.api.nvim_win_get_cursor(currentwindow)
 
-	local jobid = nil
-	local outputbuf = createOutputBuffer("output")
 	local command = ""
 	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+	local extension = vim.fn.expand("%:e")
 	local path = vim.api.nvim_buf_get_name(0)
+
+	local outputbuf = createOutputBuffer("output")
+
 	if filetype == "lua" then
 		command = "/opt/squashfs-root/usr/bin/nvim -l " .. path
-	elseif filetype == "python" then
-		condapython = vim.g.python3_host_prog or "python"
+	elseif filetype == "python" or extension == "py" then
+		local condapython = vim.g.python3_host_prog or "python"
 		command = condapython .. " " .. path
+	elseif filetype == "go" or extension == "go" then
+		command = "go run " .. path
+	elseif filetype == "http" or extension == "http" then
+		local parser = vim.treesitter.get_parser(bufnr, "customhttp")
+		local tree = parser:parse()[1]:root()
+		local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+		local node = tree:descendant_for_range(row, col, row, col)
+
+		while node and node:type() ~= "request" do
+			node = node:parent()
+		end
+
+		if not node then
+			print("No request node found")
+			return
+		else
+			print("Request node found")
+		end
+
+		command = "curl -s -i "
+		local method = ""
+		local url = ""
+		local headers = {}
+		local body = ""
+
+		for child in node:iter_children() do
+			local childtype = child:type()
+			print("Child type: " .. childtype)
+			if childtype == "method" then
+				method = vim.treesitter.get_node_text(child, bufnr)
+			elseif childtype == "url" then
+				url = vim.treesitter.get_node_text(child, bufnr)
+			elseif childtype == "header" then
+				local header = vim.treesitter.get_node_text(child, bufnr)
+				header = '-H "' .. header .. '"'
+				table.insert(headers, header)
+			elseif childtype == "body" then
+				local text = vim.treesitter.get_node_text(child, bufnr)
+				text = text:gsub("\n", "")
+				text = text:gsub("\r", "")
+				text = text:gsub("\t", "")
+				body = "-d '" .. text .. "'"
+			end
+		end
+
+		command = command .. " -X " .. method .. " " .. url .. " " .. table.concat(headers, " ") .. " " .. body
+		print("Command: " .. command)
+		-- command = command .. " | jq ."
+		command = command .. " -o -"
+	else
+		print("No filetype: " .. filetype)
 	end
 
 	local pattern = ""
-	local partial_line = ""
-	local started = false
 	local attachbuffer = function()
-		if jobid then
-			print("Jobid: " .. jobid)
-			-- kill
-			vim.fn.jobstop(jobid)
+		-- for i, id in pairs(jobids) do
+		-- 	print("Jobid: " .. id)
+		-- end
 
-			-- vimfn.chanclose(job_id, "stdin")
+		if jobids[outputbuf] then
+			print("Killing job: " .. outputbuf)
+			-- vim.fn.jobstop(jobids[outputbuf][1])
+			vim.defer_fn(function()
+				vim.fn.system("kill -9 " .. jobids[outputbuf][2])
+				print("Killed job: " .. outputbuf)
+			end, 100)
 		end
 
-		-- if outputbuffer not exists return
 		if not vim.api.nvim_buf_is_valid(outputbuf) then
 			return
 		end
 		local appendData = function(data)
-			-- vim.api.nvim_buf_set_lines(outputbuf, -1, -1, false, data)
-			-- if partial_line ~= "" then
-			-- 	data[1] = partial_line .. data[1]
-			-- 	partial_line = ""
-			-- end
-			-- if #data > 0 then
-			-- 	vim.api.nvim_buf_set_lines(outputbuf, -1, -1, false, data)
-			-- end
 			if data then
 				vim.api.nvim_buf_set_lines(outputbuf, -1, -1, false, data)
 			end
-
-			-- vim.api.nvim_command("normal! G")
-
-			-- update window to see colors
-			-- vim.api.nvim_command("redraw")
 		end
 
-		jobid = vim.fn.jobstart(command, {
-			on_enter = function()
-				appendData({ "___ process exited ___" })
-			end,
+		local jobid = vim.fn.jobstart(command, {
+			-- on_enter = function()
+			-- 	appendData({ "___ process exited ___" })
+			-- end,
 			on_stdout = function(_, data, _)
-				if not started then
-					appendData({ "___ Process started ___" })
-					started = true
-				end
-
 				local regexline = {}
 				for i, line in ipairs(data) do
 					regexline[i] = "---     " .. line
@@ -114,21 +152,16 @@ vim.api.nvim_create_user_command("AutoExecute", function()
 				for i, line in ipairs(data) do
 					data[i] = "-----     " .. line
 				end
-				-- print("Here is error")
-				-- print(data)
-				-- -- print("Error: " .. data)
-				-- -- print("----------------")
-				-- for i, line in ipairs(data) do
-				-- 	print(i, line)
-				-- end
 				appendData(data)
 			end,
-			on_exit = function(_, _, _)
-				-- print("Process exited")
-				appendData({ "___ Process exited ___" })
-				vim.cmd("normal! G")
-			end,
+			-- on_exit = function(_, _, _)
+			-- 	-- print("Process exited")
+			-- 	appendData({ "___ Process exited ___" })
+			-- 	-- vim.cmd("normal! G")
+			-- end,
 		})
+		local pid = vim.fn.jobpid(jobid)
+		jobids[outputbuf] = { jobid, pid }
 	end
 	vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 		group = vim.api.nvim_create_augroup("executer", { clear = true }),
@@ -138,9 +171,9 @@ vim.api.nvim_create_user_command("AutoExecute", function()
 
 	vim.api.nvim_buf_set_lines(outputbuf, 0, -1, false, {})
 
-	vim.fn.matchadd("OutputError", "-----     .*")
-	vim.fn.matchadd("OutputSuccess", "___ process exited ___.*")
-	vim.fn.matchadd("OutputInfo", "___ Process started ___.*")
+	-- vim.fn.matchadd("OutputError", "-----     .*")
+	-- vim.fn.matchadd("OutputSuccess", "___ process exited ___.*")
+	-- vim.fn.matchadd("OutputInfo", "___ Process started ___.*")
 	attachbuffer()
 	-- save buffer
 
