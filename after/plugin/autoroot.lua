@@ -60,3 +60,15 @@ vim.keymap.set("n", "<leader>1", function()
 	vim.fn.chdir("~")
 	print("Set cwd to ~/")
 end)
+
+vim.keymap.set("n", "<leader>3", function()
+	local filedir = vim.fn.expand("%:p:h")
+	-- i oil:// in the start of the path
+	if string.find(filedir, "oil://") then
+		filedir = string.gsub(filedir, "oil://", "")
+	end
+
+	-- change cwd
+	print("Changed directory to " .. filedir)
+	vim.fn.chdir(filedir)
+end)

@@ -1,4 +1,4 @@
-print("Loading lazy config...")
+-- print("Loading lazy config...")
 -- USER = vim.fn.expand("$USER")
 USER = "base"
 

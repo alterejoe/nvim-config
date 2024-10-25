@@ -10,7 +10,7 @@ local function set_python_path()
 		python_path = "/home/jmeyer/miniconda3/bin/python"
 	end
 
-	print("Setting python path to: " .. python_path)
+	-- print("Setting python path to: " .. python_path)
 	vim.g.python3_host_prog = python_path
 end
 

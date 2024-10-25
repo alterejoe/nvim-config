@@ -5,6 +5,9 @@ USER = "base"
 vim.opt.conceallevel = 2
 vim.o.foldenable = false -- Disable folding
 vim.o.foldmethod = "manual"
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+--
 -- change working directory to user root
 vim.cmd("cd ~/")
 
@@ -17,5 +20,6 @@ function SourceConfig()
 	end
 end
 
-require(USER .. ".core")
 require(USER .. ".lazy")
+require(USER .. ".core")
+require(USER .. ".custom")
