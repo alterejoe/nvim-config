@@ -1,7 +1,32 @@
 local buffer = require("base.custom.runner.buffer")
 local uuid = require("uuid")
+
 local M = {}
-function M.start(command, db, sessionid)
+function M.uniqueGroup(path)
+	-- if group already created return it
+	local cleanpath = string.gsub(path, "/", "_")
+	print("Cleanpath: " .. cleanpath)
+	local success, groupid = pcall(vim.api.nvim_get_augroup, cleanpath)
+
+	if success then
+		return groupid
+	else
+		local group = vim.api.nvim_create_augroup(cleanpath, { clear = true })
+		return group
+	end
+end
+
+function M.start(command, db, sessionid, path)
+	local groupname = M.uniqueGroup(path)
+	vim.api.nvim_clear_autocmds({ group = groupname })
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		group = groupname,
+		pattern = path,
+		callback = function()
+			M.start(command, db, sessionid, path)
+		end,
+	})
+
 	local id = uuid.new()
 	local uniquecommand = command .. " --unique-id=" .. id
 	local bufnr = nil
@@ -57,6 +82,8 @@ function M.start(command, db, sessionid)
 		end,
 		on_exit = function(_, code, _)
 			appendData({ "Process exited with code: " .. code })
+			M.kill(command, id) -- not sure if nessicary
+			-- db.removeBuffer(command)
 		end,
 	})
 
@@ -68,11 +95,13 @@ function M.start(command, db, sessionid)
 			buffer = bufnr,
 			callback = function()
 				M.kill(command, id)
+				db.removeBuffer(command)
 			end,
 		})
 	end, 10)
 
 	db.newProcess(command, id)
+	return bufnr
 end
 
 function M.kill(c, unique_id)

@@ -9,7 +9,6 @@ local sessionid = db.newSession()
 
 local runner = require("base.custom.runner.runner")
 local commands = require("base.custom.runner.commands.init")
-local runnergroup = vim.api.nvim_create_augroup("runner", { clear = true })
 
 vim.keymap.set("n", "E", function()
 	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
@@ -24,15 +23,7 @@ vim.keymap.set("n", "E", function()
 	end
 
 	--clear autocommands
-	vim.api.nvim_clear_autocmds({ group = runnergroup })
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		group = runnergroup,
-		-- pattern = path,
-		callback = function()
-			runner.start(command, db, sessionid)
-		end,
-	})
-	local buffer = runner.start(command, db, sessionid)
+	local buffer = runner.start(command, db, sessionid, path)
 	if not buffer then
 		return
 	end
