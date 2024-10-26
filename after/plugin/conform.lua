@@ -1,4 +1,7 @@
 local conform = require("conform")
+-----prettier------
+-- if you want a specific parser for a filetype set it in the .prettierrc file NOT here
+-------------------
 
 conform.setup({
 	formatters = {},
@@ -6,10 +9,11 @@ conform.setup({
 		lua = { "stylua" },
 		python = { "autopep8" },
 		go = { "goimports" },
-		vimwiki = { command = "prettier", args = { "--markdown-unordered-list-marker", "*" } },
+		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
-		javascript = { "prettier" },
-		-- json = { "jsonnetfmt" },
+		javascript = { "prettierd" },
+		template = { "prettierd" },
+		json = { "prettierd" },
 	},
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't
@@ -18,10 +22,11 @@ conform.setup({
 	default_formatters = { "efm" },
 })
 
-require("conform").formatters.prettier = {
+require("conform").formatters.prettierd = {
 	options = {
 		ft_parsers = {
 			vimwiki = "markdown",
+			template = "html",
 		},
 	},
 }

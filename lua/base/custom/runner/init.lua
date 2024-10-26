@@ -22,7 +22,7 @@ vim.keymap.set("n", "E", function()
 		command = commands.http.create(bufnr)
 		print("Starting process: " .. command)
 	end
-
+	print("Command: " .. command)
 	--clear autocommands
 	local buffer = runner.start(command, db, sessionid, path)
 	if filetype == "http" then
@@ -31,7 +31,7 @@ vim.keymap.set("n", "E", function()
 	if not buffer then
 		return
 	end
-	vim.api.nvim_buf_set_lines(buffer, 0, -1, false, {})
+	vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "Command: " .. command })
 end)
 
 -- on vim exit

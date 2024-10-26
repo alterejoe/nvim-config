@@ -52,11 +52,11 @@ lspconfig["gopls"].setup({
 -- 	root_dir = lspconfig.util.root_pattern("Dockerfile.dev", "Dockerfile.prod", "Dockerfile"),
 -- })
 --
-lspconfig["templ"].setup({
-	capabilities = capabilities,
-	filetypes = { "templ" },
-	cmd = { "templ", "lsp" },
-})
+-- lspconfig["templ"].setup({
+-- 	capabilities = capabilities,
+-- 	filetypes = { "templ" },
+-- 	cmd = { "templ", "lsp" },
+-- })
 
 -- lspconfig["tailwindcss"].setup({ -- tailwind lsp requries there to be a tailwind.config.js file in the root of the project, will have to restart nvim to get it to work
 --
@@ -64,11 +64,10 @@ lspconfig["templ"].setup({
 -- 	filetypes = { "css", "scss", "html", "templ" },
 -- })
 --
--- lspconfig["html"].setup({
--- 	capabilities = capabilities,
--- 	filetypes = { "html", "templ" },
--- 	cmd = { "vscode-html-language-server", "--stdio" },
--- })
+lspconfig["html"].setup({
+	capabilities = capabilities,
+	filetypes = { "html", "template" },
+})
 --
 -- lspconfig["cssls"].setup({
 -- 	capabilities = capabilities,

@@ -32,8 +32,11 @@ function M.create(bufnr)
 			if not method then
 				error("Method not found")
 			end
-
-			command = command .. "-X " .. method .. " "
+			if method == "HEAD" or method == "head" then
+				command = command .. "--head "
+			else
+				command = command .. "-X " .. method .. " "
+			end
 		elseif c:type() == "url" then
 			url = vim.treesitter.get_node_text(c, bufnr)
 			if not url then
