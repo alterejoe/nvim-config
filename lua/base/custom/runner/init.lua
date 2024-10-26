@@ -18,12 +18,16 @@ vim.keymap.set("n", "E", function()
 	if commands.general.inGeneral(filetype) then
 		command = commands.general.create(filetype, path)
 	elseif filetype == "http" then
-		command = commands.http.create(vim.api.nvim_buf_get_name(0))
+		local bufnr = vim.api.nvim_get_current_buf()
+		command = commands.http.create(bufnr)
 		print("Starting process: " .. command)
 	end
 
 	--clear autocommands
 	local buffer = runner.start(command, db, sessionid, path)
+	if filetype == "http" then
+		vim.api.nvim_buf_set_option(buffer, "filetype", "http")
+	end
 	if not buffer then
 		return
 	end

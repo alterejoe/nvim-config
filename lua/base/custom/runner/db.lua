@@ -75,6 +75,9 @@ end
 
 -- Buffers
 function M.newBuffer(c, buffer, sessionid)
+	if string.find(c, "curl") then
+		c = "curl"
+	end
 	local stmt = db:prepare("INSERT INTO buffers (command, bufnr, sessionid) VALUES ( ?, ?, ?)")
 	local header = "Command: " .. c .. "\n"
 	stmt:bind_values(c, buffer, sessionid)
@@ -84,6 +87,10 @@ function M.newBuffer(c, buffer, sessionid)
 end
 
 function M.getBuffer(c)
+	-- if curl in c
+	if string.find(c, "curl") then
+		c = "curl"
+	end
 	local stmt = db:prepare("SELECT * FROM buffers WHERE command = ? ")
 	if not stmt then
 		error("Error preparing statement: getBuffer")

@@ -28,11 +28,15 @@ function M.start(command, db, sessionid, path)
 	})
 
 	local id = uuid.new()
-	local uniquecommand = command .. " --unique-id=" .. id
+	local uniquecommand = command
+	-- if curl in command then add -s flag
+	if not command:find("curl") then
+		uniquecommand = command .. " --unique-id=" .. id
+	end
 	local bufnr = nil
 
 	local previousBuffer = db.getBuffer(command)
-
+	print("Previous buffer: ", previousBuffer)
 	if previousBuffer then
 		if sessionid ~= previousBuffer.sessionid then
 			print("Proccess already running in another nvim instance")
@@ -57,10 +61,12 @@ function M.start(command, db, sessionid, path)
 
 	local function appendData(data)
 		local allempty = true
+		local cleaned = {}
 		for _, v in ipairs(data) do
 			if v ~= "" then
 				allempty = false
-				break
+				local vcleaned = string.gsub(v, "\r", "")
+				table.insert(cleaned, vcleaned)
 			end
 		end
 
@@ -68,7 +74,7 @@ function M.start(command, db, sessionid, path)
 			return
 		end
 
-		vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
+		vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, cleaned)
 		return bufnr
 	end
 
