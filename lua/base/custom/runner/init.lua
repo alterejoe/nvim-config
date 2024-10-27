@@ -15,6 +15,7 @@ vim.keymap.set("n", "E", function()
 	print("Filetype: " .. filetype)
 	local path = vim.api.nvim_buf_get_name(0)
 	local command = nil
+
 	if commands.general.inGeneral(filetype) then
 		command = commands.general.create(filetype, path)
 	elseif filetype == "http" then
