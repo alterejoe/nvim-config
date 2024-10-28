@@ -11,12 +11,16 @@ local runner = require("base.custom.runner.runner")
 local commands = require("base.custom.runner.commands.init")
 
 vim.keymap.set("n", "E", function()
+	SourceConfig()
+
 	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
 	print("Filetype: " .. filetype)
 	local path = vim.api.nvim_buf_get_name(0)
 	local command = nil
-
-	if commands.general.inGeneral(filetype) then
+	print("Path: " .. path)
+	if vim.g.runnercommand then
+		command = vim.g.runnercommand
+	elseif commands.general.inGeneral(filetype) then
 		command = commands.general.create(filetype, path)
 	elseif filetype == "http" then
 		local bufnr = vim.api.nvim_get_current_buf()

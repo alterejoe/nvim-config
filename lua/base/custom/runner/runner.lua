@@ -28,9 +28,14 @@ function M.start(command, db, sessionid, path)
 	})
 
 	local id = uuid.new()
+	print("Custom ID: ", vim.g.uniqueid)
+	if vim.g.uniqueid then
+		id = vim.g.uniqueid
+	end
+	print("ID: " .. id)
 	local uniquecommand = command
-	-- if curl in command then add -s flag
-	if not command:find("curl") then
+	-- if curl in command then add -s flag or if make in command do not add unique id
+	if not command:find("curl") and not command:find("make") then
 		uniquecommand = command .. " --unique-id=" .. id
 	end
 	local bufnr = nil

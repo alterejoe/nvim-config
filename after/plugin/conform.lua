@@ -14,6 +14,8 @@ conform.setup({
 		javascript = { "prettierd" },
 		template = { "prettierd" },
 		json = { "prettierd" },
+		html = { "prettierd" },
+		templ = { "" },
 	},
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't
