@@ -105,6 +105,7 @@ function M.start(command, db, sessionid, path)
 		vim.api.nvim_create_autocmd("WinClosed", {
 			buffer = bufnr,
 			callback = function()
+				vim.api.nvim_clear_autocmds({ group = groupname })
 				M.kill(command, id)
 				db.removeBuffer(command)
 			end,
