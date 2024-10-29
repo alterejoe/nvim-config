@@ -23,13 +23,33 @@ function M.start(command, db, sessionid, path, override)
 
 	local groupname = M.uniqueGroup(path)
 	vim.api.nvim_clear_autocmds({ group = groupname })
+
 	vim.api.nvim_create_autocmd("BufWritePost", {
 		group = groupname,
-		pattern = path,
+		pattern = vim.fn.getcwd() .. "/*",
 		callback = function()
-			M.start(command, db, sessionid, path, override)
+			-- M.start(command, db, sessionid, path, override)
+			local p = vim.api.nvim_buf_get_name(0)
+			print("On save: ", p)
+			if p == path then
+				M.start(command, db, sessionid, path, override)
+			else
+				for i, pattern in ipairs(vim.g.runnerpattern) do
+					if string.match(p, pattern) then
+						print("Pattern matched: ", pattern)
+						M.start(command, db, sessionid, path, override)
+						return
+					end
+				end
+			end
 		end,
 	})
+
+	-- vim.api.nvim_create_autocmd("BufWritePost", {
+	-- 	callback = function()
+	-- 		print("Should run each time I save")
+	-- 	end,
+	-- })
 
 	local uniquecommand = command
 	-- if curl in command then add -s flag or if make in command do not add unique id
@@ -127,16 +147,16 @@ function M.kill(c, unique_id)
 
 	vim.fn.jobstart(command, {
 		on_stdout = function(_, data, _)
-			print("stdout: ", data)
-			for i, line in ipairs(data) do
-				print("\t", i, line)
-			end
+			-- print("stdout: ", data)
+			-- for i, line in ipairs(data) do
+			-- 	print("\t", i, line)
+			-- end
 		end,
 		on_stderr = function(_, data, _)
-			print("stderr: ", data)
-			for i, line in ipairs(data) do
-				print("\t", i, line)
-			end
+			-- print("stderr: ", data)
+			-- for i, line in ipairs(data) do
+			-- 	print("\t", i, line)
+			-- end
 		end,
 	})
 end
