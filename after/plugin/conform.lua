@@ -12,10 +12,10 @@ conform.setup({
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
 		javascript = { "prettierd" },
-		template = { "prettierd" },
+		template = { "gohtml" },
+		-- template = { "prettierd" },
 		json = { "prettierd" },
 		html = { "prettierd" },
-		templ = { "" },
 	},
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't
@@ -28,7 +28,7 @@ require("conform").formatters.prettierd = {
 	options = {
 		ft_parsers = {
 			vimwiki = "markdown",
-			template = "html",
+			-- template = "html",
 		},
 	},
 }

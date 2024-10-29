@@ -36,7 +36,11 @@ lspconfig["lua_ls"].setup({
 -- lspconfig["gdscript"].setup({ capabilities = capabilities })
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
-	filetypes = { "go", "templ" },
+	filetypes = { "go", "templ", "html" },
+})
+lspconfig["emmet_language_server"].setup({
+	capabilities = capabilities,
+	filetypes = { "html", "templ" },
 })
 -- lspconfig["typos_lsp"].setup({ capabilities = capabilities })
 -- lspconfig["docker_compose_language_service"].setup({
