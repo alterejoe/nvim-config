@@ -1,4 +1,3 @@
-
 vim.keymap.set("n", "<leader>co", function()
 	-- Copilot !toggle
 	-- true if not initialized
@@ -10,8 +9,10 @@ vim.keymap.set("n", "<leader>co", function()
 
 	if vim.g.copilot_enabled then
 		vim.api.nvim_command("Copilot! attach")
+		print("Copilot attached")
 	else
 		vim.api.nvim_command("Copilot! detach")
+		print("Copilot detached")
 	end
 
 	vim.api.nvim_command("Copilot status")

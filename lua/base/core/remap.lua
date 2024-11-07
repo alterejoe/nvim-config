@@ -70,3 +70,13 @@ vim.keymap.set("n", "<leader>x", function()
 	vim.api.nvim_command("source %")
 	-- print("Sourced", os.time())
 end)
+
+vim.keymap.set("n", ">", function()
+	-- replicate the comand f> in normal mode
+	vim.api.nvim_command("normal! f>")
+end)
+
+vim.keymap.set("n", "<", function()
+	-- replicate the comand f< in normal mode
+	vim.api.nvim_command("normal! F<")
+end)

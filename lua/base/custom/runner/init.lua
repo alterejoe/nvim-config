@@ -1,8 +1,10 @@
 print("It's alive")
 -- remove store.db if it exists
-local store = vim.fn.stdpath("data") .. "/store.db"
+local store = "~/.config/nvim/lua/base/custom/runner/store.db"
+print("store", store)
 if vim.fn.filereadable(store) == 1 then
 	vim.fn.delete(store)
+	print("Deleted store.db")
 end
 
 package.loaded["base.custom.runner.db"] = nil
@@ -28,12 +30,20 @@ function customCommandOverride(filetype)
 	return false
 end
 
+-- oil to normal path
 vim.keymap.set("n", "E", function()
 	SourceConfig()
 
 	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	print("Filetype: " .. filetype)
 	local path = vim.api.nvim_buf_get_name(0)
+	print("Filetype: " .. filetype)
+	if filetype == "oil" then
+		return
+	end
+
+	vim.cmd("noautocmd w")
+	print("Path: ", path)
+
 	local command = nil
 	print("Path: " .. path)
 	local override = false
@@ -53,8 +63,9 @@ vim.keymap.set("n", "E", function()
 		local bufnr = vim.api.nvim_get_current_buf()
 		command = commands.http.create(bufnr)
 	end
-	print("Command: " .. command)
+	print("Command: ", vim.inspect(command))
 	--clear autocommands
+
 	local buffer = runner.start(command, db, sessionid, path, override)
 	if filetype == "http" then
 		vim.api.nvim_buf_set_option(buffer, "filetype", "http")
@@ -62,7 +73,8 @@ vim.keymap.set("n", "E", function()
 	if not buffer then
 		return
 	end
-	vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "Command: " .. command })
+	local printcmd = table.concat(command, " ")
+	vim.api.nvim_buf_set_lines(buffer, 0, -1, false, { "Command: " .. printcmd })
 end)
 
 -- on vim exit

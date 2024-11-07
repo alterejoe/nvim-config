@@ -16,6 +16,16 @@ function M.uniqueGroup(path)
 	end
 end
 
+-- return true if value in table
+function M.contains(table, value)
+	for _, v in ipairs(table) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
+
 function M.start(command, db, sessionid, path, override)
 	local environment = {
 		UUID = uuid.new(),
@@ -53,9 +63,14 @@ function M.start(command, db, sessionid, path, override)
 
 	local uniquecommand = command
 	-- if curl in command then add -s flag or if make in command do not add unique id
-	if not command:find("curl") and not command:find("make") then
-		uniquecommand = command .. " --unique-id=" .. environment.UUID
+
+	if not M.contains(command, "curl") and not M.contains(command, "make") then
+		uniquecommand[#uniquecommand + 1] = "--unique-id=" .. environment.UUID
+
+		-- uniquecommand = command .. " --unique-id=" .. environment.UUID
+		-- return
 	end
+
 	print("Unique command: ", uniquecommand)
 	local bufnr = nil
 
@@ -107,7 +122,7 @@ function M.start(command, db, sessionid, path, override)
 		return bufnr
 	end
 
-	print("Starting process: " .. uniquecommand)
+	print("Starting process: ", uniquecommand)
 	local job = vim.fn.jobstart(uniquecommand, {
 		env = environment,
 		on_stdout = function(_, data, _)
@@ -141,8 +156,6 @@ function M.start(command, db, sessionid, path, override)
 end
 
 function M.kill(c, unique_id)
-	-- local printcmd = "ps aux | pgrep -f " .. unique_id
-	print("Killing process: " .. c .. " with unique id: " .. unique_id)
 	local command = "ps aux | pgrep -f " .. unique_id .. " | xargs kill -9"
 
 	vim.fn.jobstart(command, {

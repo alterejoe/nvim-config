@@ -7,7 +7,9 @@ vim.o.foldenable = false -- Disable folding
 vim.o.foldmethod = "manual"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
---
+-- conceal level 0
+vim.opt.conceallevel = 0
+
 -- change working directory to user root
 vim.cmd("cd ~/")
 

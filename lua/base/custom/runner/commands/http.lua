@@ -9,7 +9,7 @@ function M.create(bufnr)
 	local node = tree:root()
 	-- print(vim.inspect(tree))
 	-- for i in child count
-	local command = "curl -i  -s -L "
+	local command = { "curl", "-i", "-s" }
 
 	local request = nil
 	local closestRequest = nil
@@ -33,20 +33,29 @@ function M.create(bufnr)
 				error("Method not found")
 			end
 			if method == "HEAD" or method == "head" then
-				command = command .. "--head "
+				command[#command + 1] = "--head"
+				-- command = command .. "--head "
 			else
-				command = command .. "-X " .. method .. " "
+				command[#command + 1] = "-X"
+				command[#command + 1] = method
+				-- command = command .. "-X " .. method .. " "
 			end
 		elseif c:type() == "url" then
 			url = vim.treesitter.get_node_text(c, bufnr)
 			if not url then
 				error("Path not found")
 			end
-			command = command .. url .. " "
+
+			url = string.gsub(url, " ", "") -- remove double quotes
+			command[#command + 1] = "-L"
+			command[#command + 1] = '"' .. url .. '"'
+			-- command = command .. url .. " "
 		elseif c:type() == "header" then
 			local text = vim.treesitter.get_node_text(c, bufnr)
 			print("Headers", text)
-			command = command .. "-H " .. text .. " "
+			command[#command + 1] = "-H"
+			command[#command + 1] = '"' .. text .. '"'
+			-- command = command .. "-H '" .. text .. "' "
 		elseif c:type() == "body" then
 			body = vim.treesitter.get_node_text(c, bufnr)
 			if not body then
@@ -57,9 +66,20 @@ function M.create(bufnr)
 			body = string.gsub(body, "\n", "") -- remove newlines
 			body = string.gsub(body, "\t", "") -- remove tabs
 			body = string.gsub(body, " ", "") -- remove spaces
-			command = command .. "-d '" .. body .. "' "
+			command[#command + 1] = "-d"
+			command[#command + 1] = body
+			-- command = command .. "-d '" .. body .. "' "
 		end
 	end
+	-- command[#command + 1] = "2>&1"
+	-- command = command .. "2>&1"
+	-- command = { "sh", "-c", table.concat(command, " ") }
+
+	--| grep --text .
+	-- command[#command + 1] = "|"
+	-- command[#command + 1] = "grep"
+	-- command[#command + 1] = "--text"
+	-- command[#command + 1] = "."
 	return command
 end
 
