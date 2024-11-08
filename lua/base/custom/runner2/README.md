@@ -12,7 +12,7 @@
     [ ] use a keymap to start a process in pm2
         [ ] this will start project commands defined in config.lua or the default runner for the current file
             [ ] this will start a project command if there is a config.lua at the root of the cwd and the file isn't disabled for the project
-            [ ] else it will run the curernt file with the default runner
+            [x] else it will run the curernt file with the default runner
 
 *Restarting*
     [ ] on any file within project unless disabled on 'change' (not just on save) restart project
