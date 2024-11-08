@@ -80,3 +80,14 @@ vim.keymap.set("n", "<", function()
 	-- replicate the comand f< in normal mode
 	vim.api.nvim_command("normal! F<")
 end)
+
+vim.keymap.set("n", "X", function()
+	for name, value in pairs(package.loaded) do
+		if not name:match("^vim") then
+			package.loaded[name] = nil
+		end
+	end
+
+	-- reload nvim config
+	vim.api.nvim_command("source $MYVIMRC")
+end)
