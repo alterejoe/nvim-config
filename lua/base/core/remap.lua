@@ -45,6 +45,7 @@ vim.keymap.set("n", "Q", function()
 		-- term codes "<C-\\><C-n>"
 		-- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, true, true), "n", true)
 		vim.api.nvim_command("bd!")
+		-- vim.api.nvim_command("q")
 	else --if vim.fn.winnr("$") == 1 or buftype == "dbout" then
 		vim.api.nvim_command("q")
 	end
