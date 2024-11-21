@@ -53,8 +53,19 @@ M.getProcess = function(filepath)
 	local stmt = db:prepare("SELECT * FROM processes WHERE filepath = ?")
 	stmt:bind_values(filepath)
 	local result = stmt:step()
+
+	if result ~= sqlite.ROW then
+		return nil
+	end
+	local data = stmt:get_named_values()
 	stmt:finalize()
-	return result
+
+	return data
+end
+M.clearProcesses = function()
+	local stmt = db:prepare("DELETE FROM processes")
+	stmt:step()
+	stmt:finalize()
 end
 
 M.newIgnoreProject = function(filepath)
