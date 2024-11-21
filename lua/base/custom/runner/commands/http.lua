@@ -71,15 +71,6 @@ function M.create(bufnr)
 			-- command = command .. "-d '" .. body .. "' "
 		end
 	end
-	-- command[#command + 1] = "2>&1"
-	-- command = command .. "2>&1"
-	-- command = { "sh", "-c", table.concat(command, " ") }
-
-	--| grep --text .
-	-- command[#command + 1] = "|"
-	-- command[#command + 1] = "grep"
-	-- command[#command + 1] = "--text"
-	-- command[#command + 1] = "."
 	return command
 end
 
