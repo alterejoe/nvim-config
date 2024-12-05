@@ -4,7 +4,6 @@ local conform = require("conform")
 -------------------
 
 conform.setup({
-	formatters = {},
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "autopep8" },
@@ -16,6 +15,7 @@ conform.setup({
 		-- template = { "prettierd" },
 		json = { "prettierd" },
 		html = { "prettierd" },
+		gdscript = { "gdformat" },
 	},
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't

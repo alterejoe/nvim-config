@@ -102,6 +102,7 @@ vim.keymap.set("n", "E", function()
 		end
 	end
 
+	print("Absolutefilename: ", absolutefilename)
 	local command = getCommand(absolutefilename, filetype, isProject)
 
 	print(command)
