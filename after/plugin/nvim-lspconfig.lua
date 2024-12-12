@@ -20,20 +20,7 @@ lspconfig["lua_ls"].setup({
 		},
 	},
 })
--- lspconfig["tsserver"].setup({
--- 	capabilities = capabilities,
--- 	filetypes = {
--- 		"javascript",
--- 		"templ",
--- 		"javascriptreact",
--- 		"javascript.js",
--- 		"typescript",
--- 		"typescriptreact",
--- 		"typescript.ts",
--- 	},
--- })
--- lspconfig["rust_analyzer"].setup({ capabilities = capabilities })
--- lspconfig["gdscript"].setup({ capabilities = capabilities })
+
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
 	filetypes = { "go", "templ", "html" },
@@ -42,76 +29,27 @@ lspconfig["emmet_language_server"].setup({
 	capabilities = capabilities,
 	filetypes = { "html", "templ" },
 })
--- lspconfig["typos_lsp"].setup({ capabilities = capabilities })
--- lspconfig["docker_compose_language_service"].setup({
--- 	capabilities = capabilities,
--- 	cmd = { "docker-compose-langserver", "--stdio" },
--- 	filetypes = { "yaml", "yml" },
--- 	rootdir = lspconfig.util.root_pattern("docker-compose.yaml", "docker-compose.prod.yaml", "docker-compose.dev.yaml"),
--- })
--- lspconfig["dockerls"].setup({
--- 	capabilities = capabilities,
--- 	cmd = { "docker-langserver", "--stdio" },
--- 	filetypes = { "Dockerfile", "dockerfile" },
--- 	root_dir = lspconfig.util.root_pattern("Dockerfile.dev", "Dockerfile.prod", "Dockerfile"),
--- })
---
+
 lspconfig["templ"].setup({
 	capabilities = capabilities,
 	filetypes = { "templ" },
 	cmd = { "templ", "lsp" },
 })
 
--- lspconfig["tailwindcss"].setup({ -- tailwind lsp requries there to be a tailwind.config.js file in the root of the project, will have to restart nvim to get it to work
---
--- 	capabilities = capabilities,
--- 	filetypes = { "css", "scss", "html", "templ" },
--- })
---
 lspconfig["html"].setup({
 	capabilities = capabilities,
 	filetypes = { "html", "template" },
 })
---
--- lspconfig["cssls"].setup({
--- 	capabilities = capabilities,
--- 	filetypes = { "css", "scss" },
--- 	cmd = { "vscode-css-language-server", "--stdio" },
--- })
---
--- -- lspconfig["unocss"].setup({
--- --
--- -- 	cmd = { "unocss-language-server", "--stdio" },
--- -- 	filetypes = { "html", "templ", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
--- -- 	root_dir = lspconfig.util.root_pattern(".git", ".env", "config.lua"),
--- -- })
--- lspconfig["clangd"].setup({
--- 	capabilities = capabilities,
--- 	cmd = { "clangd", "--background-index" },
--- 	filetypes = { "c", "cpp", "h", "hpp" },
--- })
---
--- lspconfig["cmake"].setup({
--- 	capabilities = capabilities,
--- 	filetypes = { "cmake" },
--- })
---
--- lspconfig["ansiblels"].setup({
--- 	capabilities = capabilities,
--- 	cmd = { "ansible-language-server", "--stdio" },
--- 	filetypes = { "yaml", "yml" },
--- 	-- root_dir = lspconfig.util.root_pattern("ansible.cfg"),
--- })
 
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
--- vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
+-- markdown - marksman
+lspconfig["marksman"].setup({
+	capabilities = capabilities,
+	filetypes = { "markdown" },
+})
+
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
--- vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)

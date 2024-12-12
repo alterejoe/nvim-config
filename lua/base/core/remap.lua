@@ -1,5 +1,6 @@
 vim.api.nvim_set_keymap("t", "jk", "<C-\\><C-n>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("i", "jk", "<Esc>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "nm", "<Esc>", { noremap = true, silent = true })
 
 -- vim.api.nvim_set_keymap("t", "JK", "<C-\\><C-n>", { noremap = true, silent = true })
 -- vim.api.nvim_set_keymap("i", "JK", "<Esc>", { noremap = true, silent = true })
@@ -92,3 +93,14 @@ vim.keymap.set("n", "X", function()
 	-- reload nvim config
 	vim.api.nvim_command("source $MYVIMRC")
 end)
+
+vim.keymap.set("n", "<Tab>m", ":!make<CR>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<C-j>", function()
+	-- ctrl ww
+	vim.cmd("wincmd w")
+end)
+
+-- vim.keymap.set("n", "<C-o>", "<c-6>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<M-o>", "<c-^>", { noremap = true, silent = true })
