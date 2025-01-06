@@ -64,7 +64,7 @@ dap.configurations.go = {
 	-- },
 	-- works with go.mod packages and sub packages
 	{
-		type = "delve",
+		type = "dlv_spawn",
 		name = "Debug test (go.mod)",
 		request = "launch",
 		mode = "debug",
@@ -72,7 +72,9 @@ dap.configurations.go = {
 			local cwd = vim.fn.getcwd()
 			-- local gofile = vim.fn.expand("%:p")
 
-			return cwd .. "/..." -- this will debug the whole package
+			local relpath = vim.fn.expand("%:p:~:.")
+			print("relpath", relpath)
+			return cwd .. "/" .. relpath
 		end,
 		cwd = "${workspaceFolder}",
 	},
@@ -92,11 +94,42 @@ dap.adapters.delve = function(callback, config)
 			port = "${port}",
 			executable = {
 				command = "dlv",
-				args = { "dap", "-l", "127.0.0.1:${port}" }, -- "--log", "--log-output=dap" },
-				detached = vim.fn.has("win32") == 0,
+				args = { "dap", "-l", "127.0.0.1:${port}", "--log" },
+				-- detached = vim.fn.has("win32") == 0,
+				detached = false,
 			},
 		})
 	end
+end
+dap.adapters.dlv_spawn = function(callback)
+	local stdout = vim.loop.new_pipe(false)
+	local handle
+	local port = 38697
+	local opts = {
+		stdio = { nil, stdout },
+		args = { "dap", "-l", "127.0.0.1:" .. port },
+		detached = true,
+	}
+	handle = vim.loop.spawn("dlv", opts, function(code)
+		stdout:close()
+		handle:close()
+		if code ~= 0 then
+			print("dlv exited with code", code)
+		end
+	end)
+	assert(handle, "Error running dlv")
+	stdout:read_start(function(err, chunk)
+		assert(not err, err)
+		if chunk then
+			vim.schedule(function()
+				require("dap.repl").append(chunk)
+			end)
+		end
+	end)
+	-- Wait for delve to start
+	vim.defer_fn(function()
+		callback({ type = "server", host = "127.0.0.1", port = port })
+	end, 100)
 end
 
 dap.adapters.python = {

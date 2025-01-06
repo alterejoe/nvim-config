@@ -35,3 +35,17 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 		end
 	end,
 })
+-- set opening window to ~/Notes/_todo.md
+vim.cmd("e ~/Notes/_todo.md")
+-- vim enter autocmd
+
+vim.api.nvim_create_augroup("VimEnter", { clear = true })
+-- vim.api.nvim_create_autocmd({ "VimEnter" }, {
+-- 	group = "VimEnter",
+-- 	callback = function()
+-- 		local _todopath = "~/Notes/_todo.md"
+-- 		vim.bo.filetype = "markdown"
+--
+-- 		vim.cmd("wincmd w")
+-- 	end,
+-- })

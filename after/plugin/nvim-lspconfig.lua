@@ -20,11 +20,33 @@ lspconfig["lua_ls"].setup({
 		},
 	},
 })
-
+vim.filetype.add({
+	extension = {
+		templ = "templ",
+	},
+})
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
 	filetypes = { "go", "templ", "html" },
 })
+
+--tailwindcss
+lspconfig["tailwindcss"].setup({
+	capabilities = capabilities,
+	filetypes = { "templ" },
+	--  trigger on class attribute
+	settings = {
+		tailwindCSS = {
+			classAttributes = { "class" },
+		},
+	},
+})
+
+lspconfig["sqlls"].setup({
+	capabilities = capabilities,
+	filetypes = { "sql" },
+})
+
 lspconfig["emmet_language_server"].setup({
 	capabilities = capabilities,
 	filetypes = { "html", "templ" },

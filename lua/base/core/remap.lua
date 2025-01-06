@@ -104,3 +104,11 @@ end)
 -- vim.keymap.set("n", "<C-o>", "<c-6>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<M-o>", "<c-^>", { noremap = true, silent = true })
+
+-- keymap with  tab e it will split a terminal to the right and type the words scrapy crawl vs_spider
+vim.keymap.set(
+	"n",
+	"<Tab>e",
+	":botright split term<CR>:term scrapy crawl vs_spider<CR>",
+	{ noremap = true, silent = true }
+)

@@ -6,14 +6,14 @@ local conform = require("conform")
 conform.setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
-		python = { "autopep8" },
+		python = { "black" },
 		go = { "goimports" },
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
 		javascript = { "prettierd" },
 		template = { "gohtml" },
 		-- template = { "prettierd" },
-		json = { "prettierd" },
+		-- json = { "prettierd" },
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
 	},
@@ -38,6 +38,9 @@ require("conform").formatters.jsonnetfmt = {
 		args = { "--string-style", "d", "--indent", "4" },
 	},
 }
+
+
+
 
 vim.api.nvim_create_augroup("ConformAutogroup", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
