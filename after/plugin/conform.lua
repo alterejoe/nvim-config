@@ -17,11 +17,31 @@ conform.setup({
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
 	},
+	filter = function()
+		local filetype = vim.bo.filetype
+		if filetype == "templ" then
+			return false
+		end
+		return true
+	end,
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't
 	-- -- have other formatters configured.
 	-- ["_"] = { "trim_whitespace" },
 	default_formatters = { "efm" },
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*.templ",
+	callback = function()
+		local file = vim.fn.expand("%:p") -- Get the current file path
+		-- Run gofmt
+		vim.fn.system({ "gofmt", "-s", "-w", file })
+		-- Run custom fmt command
+		vim.fn.system({ "templ", "fmt", file })
+		-- Reload the file in Neovim
+		vim.cmd("edit!")
+	end,
 })
 
 require("conform").formatters.prettierd = {
@@ -38,9 +58,6 @@ require("conform").formatters.jsonnetfmt = {
 		args = { "--string-style", "d", "--indent", "4" },
 	},
 }
-
-
-
 
 vim.api.nvim_create_augroup("ConformAutogroup", {})
 vim.api.nvim_create_autocmd("BufWritePre", {

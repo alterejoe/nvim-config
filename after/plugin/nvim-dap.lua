@@ -9,7 +9,9 @@ dap.configurations.python = {
 		name = "Launch file",
 		program = "${file}",
 		pythonPath = function()
-			return "/home/altjoe/miniconda3/bin/python"
+			SourceConfig()
+			pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			return pythonpath
 		end,
 	},
 }
@@ -48,6 +50,19 @@ dap.configurations.rust = {
 }
 
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+
+local function has_templ_files()
+	local result = vim.fn.systemlist('find . -type f -name "*.templ"')
+	if #result > 0 then
+		print("Found .templ files:")
+		print(vim.inspect(result))
+		return true
+	else
+		print("No .templ files found.")
+		return false
+	end
+end
+
 dap.configurations.go = {
 	-- {
 	-- 	type = "delve",
@@ -71,11 +86,49 @@ dap.configurations.go = {
 		program = function()
 			local cwd = vim.fn.getcwd()
 			-- local gofile = vim.fn.expand("%:p")
-
+			print("templ files", has_templ_files())
+			if has_templ_files() then
+				print("templ files found")
+				local result = vim.fn.system("templ generate")
+				-- if result is positive
+				if result == 0 then
+					print("templ generate success")
+				else
+					print("templ generate failed")
+				end
+			end
 			local relpath = vim.fn.expand("%:p:~:.")
 			print("relpath", relpath)
-			return cwd .. "/" .. relpath
+			return "${fileDirname}"
 		end,
+		cwd = "${workspaceFolder}",
+	},
+}
+
+dap.configurations.templ = {
+	{
+
+		type = "dlv_spawn",
+		name = "Debug test (go.mod)",
+		request = "launch",
+		mode = "debug",
+		program = function()
+			local cwd = vim.fn.getcwd()
+			-- local gofile = vim.fn.expand("%:p")
+			if has_templ_files() then
+				local result = vim.fn.system("templ generate")
+				-- if result is positive
+				if result == 0 then
+					print("templ generate success")
+				else
+					print("templ generate failed")
+				end
+			end
+
+			return vim.g.dap_path or "./cmd/"
+		end,
+		-- program = vim.g.dap_path or "./cmd/",
+
 		cwd = "${workspaceFolder}",
 	},
 }
@@ -155,8 +208,69 @@ require("neodev").setup({
 	...,
 })
 
-require("dapui").setup()
+local dapui = require("dapui")
+dapui.setup({
+	layouts = {
+		{
+			elements = {
 
+				-- edit: e
+				-- expand: <CR> or left click
+				-- open: o
+				-- remove: d
+				-- repl: r
+				-- toggle: t
+				{ id = "repl", size = 1.0 },
+				-- { id = "stacks", size = 0.25 },
+				{ id = "breakpoints", size = 0.25 },
+				{ id = "scopes", size = 0.25 },
+				-- { id = "watches", size = 0.25 },
+			},
+			size = 100, -- Height of the bottom panel
+			position = "right",
+			--
+			-- position = "bottom", -- Positions the REPL at the bottom
+		},
+		--
+		-- layouts = {
+		-- 	{
+		-- 		elements = {
+		-- 			{
+		-- 				id = "scopes",
+		-- 				size = 0.25,
+		-- 			},
+		-- 			{
+		-- 				id = "breakpoints",
+		-- 				size = 0.25,
+		-- 			},
+		-- 			{
+		-- 				id = "stacks",
+		-- 				size = 0.25,
+		-- 			},
+		-- 			{
+		-- 				id = "watches",
+		-- 				size = 0.25,
+		-- 			},
+		-- 		},
+		-- 		position = "left",
+		-- 		size = 40,
+		-- 	},
+		-- 	{
+		-- 		elements = {
+		-- 			{
+		-- 				id = "repl",
+		-- 				size = 0.5,
+		-- 			},
+		-- 			{
+		-- 				id = "console",
+		-- 				size = 0.5,
+		-- 			},
+		-- 		},
+		-- 		position = "bottom",
+		-- 		size = 10,
+		-- 	},
+	},
+})
 dap.listeners.after.event_exited["dapui_config"] = function()
 	require("dap").close()
 end
@@ -164,7 +278,6 @@ end
 ---- keybinds
 local dapopen = false
 vim.keymap.set("n", "<leader>d", function()
-	local dapui = require("dapui")
 	if dapopen then
 		dapui.close()
 		dapopen = false
@@ -213,24 +326,3 @@ end, { noremap = true, silent = true })
 vim.keymap.set("n", "<Left>", function()
 	require("dap").step_out()
 end, { noremap = true, silent = true })
-
--- local function closeAlldapSessions()
--- -- 	print("trying to close all sessions")
--- 	for i, session in ipairs(dap.sessions()) do
--- 		dap.disconnect(session)
--- 		print("session closed")
--- 	end
--- end
-
--- vim.keymap.set("n", "<leader>D", function()
--- 	closeAlldapSessions()
--- 	print("All sessions closed")
--- end, { noremap = true, silent = true })
-
--- vim.api.nvim_create_autocmd({ "VimPreLeave" }, {
--- 	callback = function()
--- 		for i, session in ipairs(dap.list()) do
--- 			dap.disconnect(session)
--- 		end
--- 	end,
--- })

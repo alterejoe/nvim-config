@@ -25,6 +25,7 @@ vim.filetype.add({
 		templ = "templ",
 	},
 })
+
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
 	filetypes = { "go", "templ", "html" },
