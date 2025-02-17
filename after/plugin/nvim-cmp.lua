@@ -40,6 +40,24 @@ cmp.setup({
 		{ name = "path" },
 		{ name = "treesitter" },
 	}),
+	formatting = {
+		format = function(entry, vim_item)
+			-- Apply only for Markdown files
+			local completion_item = entry:get_completion_item()
+			if vim.bo.filetype == "markdown" and completion_item then
+				if completion_item.detail == nil then
+					return vim_item
+				end
+				completion_item.textEdit.newText = "[[" .. completion_item.detail .. "]]"
+				-- if entry.source.name == "nvim_lsp" then
+				-- 	vim_item.abbr = completion_item.detail
+				-- 	vim_item.word = completion_item.detail
+				-- 	vim_item.insertText = completion_item.detail
+				-- end
+			end
+			return vim_item
+		end,
+	},
 })
 
 -- Set configuration for specific filetype.

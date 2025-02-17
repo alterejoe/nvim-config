@@ -46,6 +46,7 @@ end
 
 -- Processes
 function M.newProcess(command, id)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("INSERT INTO processes ( command, uniqueid) VALUES ( ?, ?)")
 	stmt:bind_values(command, id)
 	stmt:step()
@@ -53,6 +54,7 @@ function M.newProcess(command, id)
 end
 
 function M.getProcess(c)
+	c = table.concat(c, " ")
 	local stmt = db:prepare("SELECT * FROM processes WHERE command = ?")
 	stmt:bind_values(c)
 	local row = stmt:step()
@@ -67,6 +69,7 @@ function M.getProcess(c)
 end
 
 function M.removeProcess(command)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("DELETE FROM processes WHERE command = ?")
 	stmt:bind_values(command)
 	stmt:step()
@@ -75,6 +78,10 @@ end
 
 -- Buffers
 function M.newBuffer(c, buffer, sessionid)
+	c = table.concat(c, " ")
+	if string.find(c, "curl") then
+		c = "curl"
+	end
 	local stmt = db:prepare("INSERT INTO buffers (command, bufnr, sessionid) VALUES ( ?, ?, ?)")
 	local header = "Command: " .. c .. "\n"
 	stmt:bind_values(c, buffer, sessionid)
@@ -83,7 +90,14 @@ function M.newBuffer(c, buffer, sessionid)
 	return header
 end
 
+-- c = {"curl", "-i", "-L", "-s"}
 function M.getBuffer(c)
+	-- if curl in c
+	c = table.concat(c, " ")
+
+	if string.find(c, "curl") then
+		c = "curl"
+	end
 	local stmt = db:prepare("SELECT * FROM buffers WHERE command = ? ")
 	if not stmt then
 		error("Error preparing statement: getBuffer")
@@ -103,6 +117,7 @@ function M.getBuffer(c)
 end
 
 function M.updateBuffer(c, text)
+	c = table.concat(c, " ")
 	local stmt = db:prepare("UPDATE buffers SET data = ? WHERE command = ?")
 	stmt:bind_values(text, c)
 	stmt:step()
@@ -110,6 +125,7 @@ function M.updateBuffer(c, text)
 end
 
 function M.removeBuffer(command)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("DELETE FROM buffers WHERE command = ?")
 	stmt:bind_values(command)
 	stmt:step()
@@ -142,6 +158,7 @@ end
 
 ------- future development historical logs
 function M.newLog(command, data)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("INSERT INTO logs (command, data) VALUES (?, ?)")
 	stmt:bind_values(command, data)
 	stmt:step()
@@ -149,6 +166,7 @@ function M.newLog(command, data)
 end
 
 function M.getLogs(command)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("SELECT * FROM logs WHERE command = ?")
 	stmt:bind_values(command)
 	local logs = {}
@@ -159,6 +177,7 @@ function M.getLogs(command)
 end
 
 function M.removeOldestLog(command)
+	command = table.concat(command, " ")
 	local stmt = db:prepare("SELECT * FROM logs WHERE command = ? ORDER BY id DESC")
 	stmt:bind_values(command)
 	local logs = {}

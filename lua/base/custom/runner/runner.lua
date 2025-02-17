@@ -16,23 +16,66 @@ function M.uniqueGroup(path)
 	end
 end
 
-function M.start(command, db, sessionid, path)
+-- return true if value in table
+function M.contains(table, value)
+	for _, v in ipairs(table) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
+
+function M.start(command, db, sessionid, path, override)
+	local environment = {
+		UUID = uuid.new(),
+	}
+
 	local groupname = M.uniqueGroup(path)
 	vim.api.nvim_clear_autocmds({ group = groupname })
+
 	vim.api.nvim_create_autocmd("BufWritePost", {
 		group = groupname,
-		pattern = path,
+		pattern = vim.fn.getcwd() .. "/*",
 		callback = function()
-			M.start(command, db, sessionid, path)
+			-- M.start(command, db, sessionid, path, override)
+			local p = vim.api.nvim_buf_get_name(0)
+			print("On save: ", p)
+			if p == path then
+				M.start(command, db, sessionid, path, override)
+			else
+				for i, pattern in ipairs(vim.g.runnerpattern) do
+					if string.match(p, pattern) then
+						print("Pattern matched: ", pattern)
+						M.start(command, db, sessionid, path, override)
+						return
+					end
+				end
+			end
 		end,
 	})
 
-	local id = uuid.new()
-	local uniquecommand = command .. " --unique-id=" .. id
+	-- vim.api.nvim_create_autocmd("BufWritePost", {
+	-- 	callback = function()
+	-- 		print("Should run each time I save")
+	-- 	end,
+	-- })
+
+	local uniquecommand = command
+	-- if curl in command then add -s flag or if make in command do not add unique id
+
+	if not M.contains(command, "curl") and not M.contains(command, "make") then
+		uniquecommand[#uniquecommand + 1] = "--unique-id=" .. environment.UUID
+
+		-- uniquecommand = command .. " --unique-id=" .. environment.UUID
+		-- return
+	end
+
+	print("Unique command: ", uniquecommand)
 	local bufnr = nil
 
 	local previousBuffer = db.getBuffer(command)
-
+	print("Previous buffer: ", vim.inspect(previousBuffer))
 	if previousBuffer then
 		if sessionid ~= previousBuffer.sessionid then
 			print("Proccess already running in another nvim instance")
@@ -46,21 +89,28 @@ function M.start(command, db, sessionid, path)
 		print("Buffer created")
 	end
 
+	print("Command: ", command)
 	local oldprocess = db.getProcess(command)
+	print("Old process: ", vim.inspect(oldprocess))
 	if oldprocess then
 		local c = oldprocess.command
 		local unique_id = oldprocess.uniqueid
+		-- wait for kill to finish before continuing
 		M.kill(c, unique_id)
 		db.removeProcess(command)
 		print("Old process removed")
+		-- db.removeProcess(command)
+		-- print("Old process removed")
 	end
 
 	local function appendData(data)
 		local allempty = true
+		local cleaned = {}
 		for _, v in ipairs(data) do
 			if v ~= "" then
 				allempty = false
-				break
+				local vcleaned = string.gsub(v, "\r", "")
+				table.insert(cleaned, vcleaned)
 			end
 		end
 
@@ -68,12 +118,13 @@ function M.start(command, db, sessionid, path)
 			return
 		end
 
-		vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, data)
+		vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, cleaned)
 		return bufnr
 	end
 
-	print("Starting process: " .. uniquecommand)
+	print("Starting process: ", uniquecommand)
 	local job = vim.fn.jobstart(uniquecommand, {
+		env = environment,
 		on_stdout = function(_, data, _)
 			appendData(data)
 		end,
@@ -81,39 +132,44 @@ function M.start(command, db, sessionid, path)
 			appendData(data)
 		end,
 		on_exit = function(_, code, _)
-			appendData({ "Process exited with code: " .. code })
-			M.kill(command, id) -- not sure if nessicary
+			-- appendData({ "Process exited with code: " .. code })
+			M.kill(command, environment.UUID)
 			-- db.removeBuffer(command)
 		end,
 	})
 
-	print("ID: " .. id)
+	-- print("ID: " .. id)
 
 	vim.defer_fn(function()
-		print("Defer ran")
 		vim.api.nvim_create_autocmd("WinClosed", {
 			buffer = bufnr,
 			callback = function()
-				M.kill(command, id)
+				vim.api.nvim_clear_autocmds({ group = groupname })
+				M.kill(command, environment.UUID)
 				db.removeBuffer(command)
 			end,
 		})
 	end, 10)
 
-	db.newProcess(command, id)
+	db.newProcess(command, environment.UUID)
 	return bufnr
 end
 
 function M.kill(c, unique_id)
-	-- local printcmd = "ps aux | pgrep -f " .. unique_id
 	local command = "ps aux | pgrep -f " .. unique_id .. " | xargs kill -9"
 
 	vim.fn.jobstart(command, {
 		on_stdout = function(_, data, _)
-			print("stdout: ", data)
+			-- print("stdout: ", data)
+			-- for i, line in ipairs(data) do
+			-- 	print("\t", i, line)
+			-- end
 		end,
 		on_stderr = function(_, data, _)
-			print("stderr: ", data)
+			-- print("stderr: ", data)
+			-- for i, line in ipairs(data) do
+			-- 	print("\t", i, line)
+			-- end
 		end,
 	})
 end

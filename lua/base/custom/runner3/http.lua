@@ -1,6 +1,7 @@
 local M = {}
 
-function M.create(bufnr)
+function M.createCmd()
+	local bufnr = vim.api.nvim_get_current_buf()
 	local parser = vim.treesitter.get_parser(bufnr, "customhttp")
 	local tree = parser:parse()[1]
 	if not tree then
@@ -71,7 +72,7 @@ function M.create(bufnr)
 			-- command = command .. "-d '" .. body .. "' "
 		end
 	end
+	command = table.concat(command, " ")
 	return command
 end
-
 return M

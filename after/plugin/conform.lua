@@ -1,16 +1,30 @@
 local conform = require("conform")
+-----prettier------
+-- if you want a specific parser for a filetype set it in the .prettierrc file NOT here
+-------------------
 
 conform.setup({
-	formatters = {},
 	formatters_by_ft = {
 		lua = { "stylua" },
-		python = { "autopep8" },
+		python = { "black" },
 		go = { "goimports" },
-		vimwiki = { command = "prettier", args = { "--markdown-unordered-list-marker", "*" } },
+		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
-		javascript = { "prettier" },
-		-- json = { "jsonnetfmt" },
+		javascript = { "biome" },
+		template = { "gohtml" },
+		-- template = { "prettierd" },
+		json = { "prettierd" },
+		html = { "prettierd" },
+		gdscript = { "gdformat" },
+		sql = { "sqlfmt" },
 	},
+	filter = function()
+		local filetype = vim.bo.filetype
+		if filetype == "templ" then
+			return false
+		end
+		return true
+	end,
 	-- ["*"] = { "codespell" },
 	-- -- Use the "_" filetype to run formatters on filetypes that don't
 	-- -- have other formatters configured.
@@ -18,10 +32,24 @@ conform.setup({
 	default_formatters = { "efm" },
 })
 
-require("conform").formatters.prettier = {
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*.templ",
+	callback = function()
+		local file = vim.fn.expand("%:p") -- Get the current file path
+		-- Run gofmt
+		vim.fn.system({ "gofmt", "-s", "-w", file })
+		-- Run custom fmt command
+		vim.fn.system({ "templ", "fmt", file })
+		-- Reload the file in Neovim
+		vim.cmd("edit!")
+	end,
+})
+
+require("conform").formatters.prettierd = {
 	options = {
 		ft_parsers = {
 			vimwiki = "markdown",
+			-- template = "html",
 		},
 	},
 }
