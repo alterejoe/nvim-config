@@ -9,23 +9,27 @@ vim.keymap.set("n", "Q", function()
 	local buftype = vim.bo.buftype
 	local bufname = vim.fn.expand("%:t")
 
-	print("buftype", buftype, "bufname", bufname)
 	if bufname == "output" then
 		-- vim.api.nvim_command("q!")
 		-- close the buffer without saving
 		local bufnumber = vim.fn.bufnr("%")
-		print("bufnumber", bufnumber)
 		vim.api.nvim_buf_delete(bufnumber, { force = true })
 
 		-- vim.api.nvim_command("bd!")
 		return
 	end
-
+	print("buftype for oil nvim", buftype)
 	local function writeSave()
 		vim.api.nvim_command("wq")
 	end
 
-	if buftype == "" then
+	local dapfile = { "dap-repl", "dapui_breakpoints", "dapui_scopes" }
+	print("Buffer type", buftype)
+	if buftype == "acwrite" then
+		vim.api.nvim_command("q")
+	elseif buftype == "prompt" then
+		vim.api.nvim_command("q!")
+	elseif buftype == "" then
 		if pcall(writeSave) then
 			print("Written and Quit")
 		else
@@ -36,6 +40,9 @@ vim.keymap.set("n", "Q", function()
 				vim.api.nvim_command("q")
 			end
 		end
+	elseif vim.fn.index(dapfile, vim.bo.filetype) ~= -1 then
+		print("Closing dap file")
+		CloseDap()
 	elseif buftype == "terminal" then
 		print("quitting terminal")
 		-- start insert mode
@@ -112,3 +119,8 @@ vim.keymap.set(
 	":botright split term<CR>:term scrapy crawl vs_spider<CR>",
 	{ noremap = true, silent = true }
 )
+
+vim.keymap.set("n", "<C-w>V", function()
+	-- split horizontal
+	vim.api.nvim_command("split")
+end, { noremap = true, silent = true })

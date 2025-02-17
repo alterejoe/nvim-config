@@ -8,6 +8,35 @@ local capabilities = vim.tbl_deep_extend(
 	require("cmp_nvim_lsp").default_capabilities()
 )
 ---
+
+-- html templ and golang
+vim.filetype.add({
+	extension = {
+		templ = "templ",
+	},
+})
+lspconfig["templ"].setup({
+	capabilities = capabilities,
+	filetypes = { "templ" },
+	cmd = { "templ", "lsp" },
+})
+
+lspconfig["eslint"].setup({
+	capabilities = capabilities,
+	filetypes = { "javascript", "typescript" },
+})
+
+lspconfig["ts_ls"].setup({
+	capabilities = capabilities,
+	filetypes = { "typescript", "typescriptreact", "javascript" },
+})
+
+lspconfig["html"].setup({
+	capabilities = capabilities,
+	filetypes = { "html", "template" },
+})
+
+---
 ---- installed lsp servers
 lspconfig["pyright"].setup({})
 
@@ -19,16 +48,6 @@ lspconfig["lua_ls"].setup({
 			"require",
 		},
 	},
-})
-vim.filetype.add({
-	extension = {
-		templ = "templ",
-	},
-})
-
-lspconfig["gopls"].setup({
-	capabilities = capabilities,
-	filetypes = { "go", "templ", "html" },
 })
 
 --tailwindcss
@@ -53,17 +72,15 @@ lspconfig["emmet_language_server"].setup({
 	filetypes = { "html", "templ" },
 })
 
-lspconfig["templ"].setup({
+lspconfig["gopls"].setup({
 	capabilities = capabilities,
-	filetypes = { "templ" },
-	cmd = { "templ", "lsp" },
+	filetypes = { "go", "templ", "html" },
+	settings = {
+		templateExtensions = {
+			"templ",
+		},
+	},
 })
-
-lspconfig["html"].setup({
-	capabilities = capabilities,
-	filetypes = { "html", "template" },
-})
-
 -- markdown - marksman
 lspconfig["marksman"].setup({
 	capabilities = capabilities,

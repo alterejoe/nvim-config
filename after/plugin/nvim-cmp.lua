@@ -55,7 +55,6 @@ cmp.setup({
 				-- 	vim_item.insertText = completion_item.detail
 				-- end
 			end
-			print(vim.inspect(vim_item))
 			return vim_item
 		end,
 	},

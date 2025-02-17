@@ -1,13 +1,13 @@
 vim.treesitter.language.register("customhttp", "http")
 
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.customhttp = {
-	install_info = {
-		url = "/home/altjoe/Documents/projects/tree-sitter-http/",
-		files = { "src/parser.c" },
-	},
-	filetype = "http", -- if filetype does not match the parser name
-}
+-- parser_config.customhttp = {
+-- 	install_info = {
+-- 		url = "/home/altjoe/Documents/projects/tree-sitter-http/",
+-- 		files = { "src/parser.c" },
+-- 	},
+-- 	filetype = "http", -- if filetype does not match the parser name
+-- }
 
 vim.cmd([[autocmd BufRead,BufNewFile *.http set filetype=http]])
 vim.cmd([[autocmd BufRead,BufNewFile *.tmpl set filetype=template]])
@@ -15,7 +15,7 @@ vim.cmd([[autocmd BufRead,BufNewFile *.tmpl set filetype=template]])
 require("nvim-treesitter.configs").setup({
 
 	-- A list of parser names, or "all" (the listed parsers MUST always be installed)
-	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "customhttp", "html" },
+	ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "html" },
 
 	-- Install parsers synchronously (only applied to `ensure_installed`)
 	sync_install = false,

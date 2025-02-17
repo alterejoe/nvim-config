@@ -85,21 +85,9 @@ dap.configurations.go = {
 		mode = "debug",
 		program = function()
 			local cwd = vim.fn.getcwd()
-			-- local gofile = vim.fn.expand("%:p")
-			print("templ files", has_templ_files())
-			if has_templ_files() then
-				print("templ files found")
-				local result = vim.fn.system("templ generate")
-				-- if result is positive
-				if result == 0 then
-					print("templ generate success")
-				else
-					print("templ generate failed")
-				end
-			end
-			local relpath = vim.fn.expand("%:p:~:.")
-			print("relpath", relpath)
-			return "${fileDirname}"
+			local result = vim.fn.system("templ generate -path=" .. cwd)
+			print("templ generate: ", result)
+			return vim.g.dap_path or "./cmd/"
 		end,
 		cwd = "${workspaceFolder}",
 	},
@@ -114,17 +102,27 @@ dap.configurations.templ = {
 		mode = "debug",
 		program = function()
 			local cwd = vim.fn.getcwd()
-			-- local gofile = vim.fn.expand("%:p")
-			if has_templ_files() then
-				local result = vim.fn.system("templ generate")
-				-- if result is positive
-				if result == 0 then
-					print("templ generate success")
-				else
-					print("templ generate failed")
-				end
-			end
+			local result = vim.fn.system("templ generate")
+			print("templ generate: ", result)
+			return vim.g.dap_path or "./cmd/"
+		end,
+		-- program = vim.g.dap_path or "./cmd/",
 
+		cwd = "${workspaceFolder}",
+	},
+}
+
+dap.configurations.javascript = {
+	{
+
+		type = "dlv_spawn",
+		name = "Debug test (go.mod)",
+		request = "launch",
+		mode = "debug",
+		program = function()
+			local cwd = vim.fn.getcwd()
+			local result = vim.fn.system("templ generate")
+			print("templ generate: ", result)
 			return vim.g.dap_path or "./cmd/"
 		end,
 		-- program = vim.g.dap_path or "./cmd/",
@@ -140,6 +138,9 @@ dap.adapters.delve = function(callback, config)
 			type = "server",
 			host = config.host or "127.0.0.1",
 			port = config.port or "38697",
+			options = {
+				args = { "--log-output=rpc" }, -- Avoids escape codes in logs
+			},
 		})
 	else
 		callback({
@@ -151,9 +152,13 @@ dap.adapters.delve = function(callback, config)
 				-- detached = vim.fn.has("win32") == 0,
 				detached = false,
 			},
+			options = {
+				args = { "--log-output=rpc -gcflags='all=-N -l'" }, -- Avoids escape codes in logs
+			},
 		})
 	end
 end
+
 dap.adapters.dlv_spawn = function(callback)
 	local stdout = vim.loop.new_pipe(false)
 	local handle
@@ -213,76 +218,54 @@ dapui.setup({
 	layouts = {
 		{
 			elements = {
-
-				-- edit: e
-				-- expand: <CR> or left click
-				-- open: o
-				-- remove: d
-				-- repl: r
-				-- toggle: t
 				{ id = "repl", size = 1.0 },
-				-- { id = "stacks", size = 0.25 },
 				{ id = "breakpoints", size = 0.25 },
 				{ id = "scopes", size = 0.25 },
-				-- { id = "watches", size = 0.25 },
 			},
 			size = 100, -- Height of the bottom panel
 			position = "right",
-			--
-			-- position = "bottom", -- Positions the REPL at the bottom
 		},
-		--
-		-- layouts = {
-		-- 	{
-		-- 		elements = {
-		-- 			{
-		-- 				id = "scopes",
-		-- 				size = 0.25,
-		-- 			},
-		-- 			{
-		-- 				id = "breakpoints",
-		-- 				size = 0.25,
-		-- 			},
-		-- 			{
-		-- 				id = "stacks",
-		-- 				size = 0.25,
-		-- 			},
-		-- 			{
-		-- 				id = "watches",
-		-- 				size = 0.25,
-		-- 			},
-		-- 		},
-		-- 		position = "left",
-		-- 		size = 40,
-		-- 	},
-		-- 	{
-		-- 		elements = {
-		-- 			{
-		-- 				id = "repl",
-		-- 				size = 0.5,
-		-- 			},
-		-- 			{
-		-- 				id = "console",
-		-- 				size = 0.5,
-		-- 			},
-		-- 		},
-		-- 		position = "bottom",
-		-- 		size = 10,
-		-- 	},
+		{
+			elements = {
+				{ id = "repl", size = 1.0 },
+				{ id = "breakpoints", size = 0.25 },
+				{ id = "scopes", size = 0.25 },
+			},
+			size = 25, -- Height of the bottom panel
+			position = "bottom",
+		},
 	},
 })
 dap.listeners.after.event_exited["dapui_config"] = function()
 	require("dap").close()
 end
 
+function OpenDap(layoutid)
+	dapui.open({ layout = layoutid })
+end
+
+function CloseDap()
+	dapui.close()
+end
 ---- keybinds
 local dapopen = false
 vim.keymap.set("n", "<leader>d", function()
 	if dapopen then
-		dapui.close()
+		CloseDap()
 		dapopen = false
 	else
-		dapui.open()
+		OpenDap(1)
+		dapopen = true
+	end
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>h", function()
+	if dapopen then
+		CloseDap()
+		-- dapui.close()
+		dapopen = false
+	else
+		OpenDap(2)
 		dapopen = true
 	end
 end, { noremap = true, silent = true })
@@ -294,16 +277,25 @@ vim.keymap.set("n", "<leader>b", function()
 end, { noremap = true, silent = true })
 
 -- keybind for continue
-
 local terminate = false
-vim.keymap.set("n", "E", function()
-	if terminate then
-		require("dap").terminate()
-		terminate = false
-	end
 
-	require("dap").continue()
-	terminate = true
+require("dap").listeners.after.event_terminated["user_listener"] = function()
+	terminate = false
+end
+
+vim.keymap.set("n", "E", function()
+	if terminate == true then
+		require("dap").terminate()
+		return
+	else
+		require("dap").continue()
+		terminate = true
+		return
+	end
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<c-n>", function()
+	vim.cmd("DapNew")
 end, { noremap = true, silent = true })
 
 -- keybind for step over

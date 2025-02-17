@@ -10,12 +10,13 @@ conform.setup({
 		go = { "goimports" },
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
-		javascript = { "prettierd" },
+		javascript = { "biome" },
 		template = { "gohtml" },
 		-- template = { "prettierd" },
-		-- json = { "prettierd" },
+		json = { "prettierd" },
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
+		sql = { "sqlfmt" },
 	},
 	filter = function()
 		local filetype = vim.bo.filetype
