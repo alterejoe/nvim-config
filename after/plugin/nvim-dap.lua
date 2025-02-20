@@ -51,17 +51,17 @@ dap.configurations.rust = {
 
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 
-local function has_templ_files()
-	local result = vim.fn.systemlist('find . -type f -name "*.templ"')
-	if #result > 0 then
-		print("Found .templ files:")
-		print(vim.inspect(result))
-		return true
-	else
-		print("No .templ files found.")
-		return false
-	end
-end
+-- local function has_templ_files()
+-- 	local result = vim.fn.systemlist('find . -type f -name "*.templ"')
+-- 	if #result > 0 then
+-- 		print("Found .templ files:")
+-- 		print(vim.inspect(result))
+-- 		return true
+-- 	else
+-- 		print("No .templ files found.")
+-- 		return false
+-- 	end
+-- end
 
 dap.configurations.go = {
 	-- {
