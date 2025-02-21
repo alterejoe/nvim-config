@@ -149,8 +149,8 @@ dap.adapters.delve = function(callback, config)
 			executable = {
 				command = "dlv",
 				args = { "dap", "-l", "127.0.0.1:${port}", "--log" },
-				-- detached = vim.fn.has("win32") == 0,
-				detached = false,
+				detached = vim.fn.has("win32") == 0,
+				-- detached = false,
 			},
 			options = {
 				args = { "--log-output=rpc -gcflags='all=-N -l'" }, -- Avoids escape codes in logs

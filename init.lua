@@ -49,3 +49,6 @@ vim.api.nvim_create_augroup("VimEnter", { clear = true })
 -- 		vim.cmd("wincmd w")
 -- 	end,
 -- })
+
+vim.cmd("AWStart")
+vim.cmd("AWStatus")
