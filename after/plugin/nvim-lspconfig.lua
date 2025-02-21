@@ -163,8 +163,8 @@ local lsp_flags = {
 	debounce_text_changes = 50,
 }
 
-require("lspconfig").gdscript.setup({
-	on_attach = on_attach,
-	flags = lsp_flags,
-	filetypes = { "gd", "gdscript", "gdscript3" },
-})
+-- require("lspconfig").gdscript.setup({
+-- 	on_attach = on_attach,
+-- 	flags = lsp_flags,
+-- 	filetypes = { "gd", "gdscript", "gdscript3" },
+-- })
