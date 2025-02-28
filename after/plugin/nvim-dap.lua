@@ -63,6 +63,13 @@ dap.configurations.rust = {
 -- 	end
 -- end
 
+local goserverdeps = function()
+	local cwd = vim.fn.getcwd()
+	local result = vim.fn.system("templ generate -path=" .. cwd)
+	print("templ generate: ", result)
+	result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css")
+	print("tailwindcss: ", result)
+end
 dap.configurations.go = {
 	-- {
 	-- 	type = "delve",
@@ -80,16 +87,34 @@ dap.configurations.go = {
 	-- works with go.mod packages and sub packages
 	{
 		type = "dlv_spawn",
-		name = "Debug test (go.mod)",
+		name = "Run normally",
 		request = "launch",
 		mode = "debug",
 		program = function()
-			local cwd = vim.fn.getcwd()
-			local result = vim.fn.system("templ generate -path=" .. cwd)
-			print("templ generate: ", result)
+			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
 		cwd = "${workspaceFolder}",
+	},
+	{
+		type = "dlv_spawn",
+		name = "Debug test file",
+		request = "launch",
+		mode = "test",
+		-- program = "${fileDirname}",
+		program = function()
+			return "${fileDirname}"
+		end,
+	},
+	{
+		type = "dlv_spawn",
+		name = "Debug test project",
+		request = "launch",
+		mode = "test",
+		program = function()
+			goserverdeps()
+			return "./..."
+		end,
 	},
 }
 
@@ -101,9 +126,7 @@ dap.configurations.templ = {
 		request = "launch",
 		mode = "debug",
 		program = function()
-			local cwd = vim.fn.getcwd()
-			local result = vim.fn.system("templ generate")
-			print("templ generate: ", result)
+			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
 		-- program = vim.g.dap_path or "./cmd/",
@@ -120,9 +143,11 @@ dap.configurations.javascript = {
 		request = "launch",
 		mode = "debug",
 		program = function()
+			-- local cwd = vim.fn.getcwd()
+			-- local result = vim.fn.system("templ generate")
+			-- print("templ generate: ", result)
 			local cwd = vim.fn.getcwd()
-			local result = vim.fn.system("templ generate")
-			print("templ generate: ", result)
+			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
 		-- program = vim.g.dap_path or "./cmd/",

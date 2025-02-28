@@ -21,10 +21,10 @@ lspconfig["templ"].setup({
 	cmd = { "templ", "lsp" },
 })
 
-lspconfig["eslint"].setup({
-	capabilities = capabilities,
-	filetypes = { "javascript", "typescript" },
-})
+-- lspconfig["eslint"].setup({
+-- 	capabilities = capabilities,
+-- 	filetypes = { "javascript", "typescript" },
+-- })
 
 lspconfig["ts_ls"].setup({
 	capabilities = capabilities,
@@ -58,6 +58,12 @@ lspconfig["tailwindcss"].setup({
 	settings = {
 		tailwindCSS = {
 			classAttributes = { "class" },
+			-- return content.match(/(?<=class=["'`])[^"'\s]+/g) || [];
+			experimental = {
+				classRegex = {
+					"(?<=class=[\"'`])[^\"'\\s]+",
+				},
+			},
 		},
 	},
 })
@@ -74,7 +80,7 @@ lspconfig["emmet_language_server"].setup({
 
 lspconfig["gopls"].setup({
 	capabilities = capabilities,
-	filetypes = { "go", "templ", "html" },
+	filetypes = { "go", "templ" },
 	settings = {
 		templateExtensions = {
 			"templ",
