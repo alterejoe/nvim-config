@@ -70,6 +70,7 @@ local goserverdeps = function()
 	result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css")
 	print("tailwindcss: ", result)
 end
+
 dap.configurations.go = {
 	-- {
 	-- 	type = "delve",
@@ -98,23 +99,48 @@ dap.configurations.go = {
 	},
 	{
 		type = "dlv_spawn",
-		name = "Debug test file",
+		name = "Debug test current file",
 		request = "launch",
 		mode = "test",
-		-- program = "${fileDirname}",
-		program = function()
-			return "${fileDirname}"
+		program = "${fileDirname}",
+		-- program = function() end,
+		-- args = { "-v" },
+		-- only test current file
+		-- args = { "-test.v", "-test.run", "Test" },
+		args = function()
+			local tests = {}
+			local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+			for _, line in ipairs(lines) do
+				-- print("line: ", line)
+				-- local funcfound = string.find(line, "func")
+				-- if funcfound then
+				-- 	local testfound = string.find(line, "Test")
+				-- 	if testfound then
+				local testname = string.match(line, "Test[%w_]+")
+				-- print("testname: ", testname)
+				if testname then
+					table.insert(tests, testname)
+				end
+			end
+			if #tests > 0 then
+				print("tests found: ", vim.inspect(tests))
+				local pattern = "^(" .. table.concat(tests, "|") .. ")$"
+				return { "-test.v", "-test.run", pattern }
+			else
+				print("no tests found")
+				return { "-test.v" }
+			end
 		end,
 	},
 	{
 		type = "dlv_spawn",
-		name = "Debug test project",
+		name = "Debug test current folder",
 		request = "launch",
 		mode = "test",
 		program = function()
-			goserverdeps()
-			return "./..."
+			return "${fileDirname}"
 		end,
+		-- args = { "-test.v" },
 	},
 }
 
