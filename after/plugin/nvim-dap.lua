@@ -71,6 +71,32 @@ local goserverdeps = function()
 	print("tailwindcss: ", result)
 end
 
+local function GetTestFunctionNames(filepath)
+	local tests = {}
+	local lines = vim.fn.readfile(filepath)
+	-- local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+	for _, line in ipairs(lines) do
+		-- print("line: ", line)
+		-- local funcfound = string.find(line, "func")
+		-- if funcfound then
+		-- 	local testfound = string.find(line, "Test")
+		-- 	if testfound then
+		local testname = string.match(line, "Test[%w_]+")
+		-- print("testname: ", testname)
+		if testname then
+			table.insert(tests, testname)
+		end
+	end
+	if #tests > 0 then
+		print("tests found: ", vim.inspect(tests))
+		local pattern = "^(" .. table.concat(tests, "|") .. ")$"
+		return { "-test.v", "-test.run", pattern }
+	else
+		print("no tests found")
+		return { "-test.v" }
+	end
+end
+
 dap.configurations.go = {
 	-- {
 	-- 	type = "delve",
@@ -108,27 +134,18 @@ dap.configurations.go = {
 		-- only test current file
 		-- args = { "-test.v", "-test.run", "Test" },
 		args = function()
-			local tests = {}
-			local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-			for _, line in ipairs(lines) do
-				-- print("line: ", line)
-				-- local funcfound = string.find(line, "func")
-				-- if funcfound then
-				-- 	local testfound = string.find(line, "Test")
-				-- 	if testfound then
-				local testname = string.match(line, "Test[%w_]+")
-				-- print("testname: ", testname)
-				if testname then
-					table.insert(tests, testname)
-				end
-			end
-			if #tests > 0 then
-				print("tests found: ", vim.inspect(tests))
-				local pattern = "^(" .. table.concat(tests, "|") .. ")$"
-				return { "-test.v", "-test.run", pattern }
+			local current_file = vim.fn.expand("%:t")
+			local isTestFile = string.match(current_file, "_test.go")
+			if isTestFile then
+				local current_file_path = vim.fn.expand("%:p")
+				return GetTestFunctionNames(current_file_path)
 			else
-				print("no tests found")
-				return { "-test.v" }
+				local currentfile_test = vim.fn.expand("%:p:r") .. "_test.go"
+				if vim.fn.filereadable(currentfile_test) == 1 then
+					return GetTestFunctionNames(currentfile_test)
+				else
+					return { "-test.v" }
+				end
 			end
 		end,
 	},
