@@ -88,11 +88,9 @@ local function GetTestFunctionNames(filepath)
 		end
 	end
 	if #tests > 0 then
-		print("tests found: ", vim.inspect(tests))
 		local pattern = "^(" .. table.concat(tests, "|") .. ")$"
 		return { "-test.v", "-test.run", pattern }
 	else
-		print("no tests found")
 		return { "-test.v" }
 	end
 end
