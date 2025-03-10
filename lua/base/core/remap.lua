@@ -124,3 +124,9 @@ vim.keymap.set("n", "<C-w>V", function()
 	-- split horizontal
 	vim.api.nvim_command("split")
 end, { noremap = true, silent = true })
+
+-- reload file for external changes
+vim.keymap.set("n", "L", function()
+	-- split horizontal
+	vim.api.nvim_command("e")
+end, { noremap = true, silent = true })
