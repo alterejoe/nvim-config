@@ -1,5 +1,11 @@
 local dap = require("dap")
--- listeners
+--
+-- require("dap").defaults.fallback.terminal_win_cmd = "50vsplit new"
+-- vim.fn.sign_define("DapStopped", { text = "🔴", texthl = "Error", linehl = "", numhl = "" })
+
+dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
+vim.keymap.set("n", "<leader>bp", dap.up, { desc = "Debug: DAP Stack UP" })
+vim.keymap.set("n", "<leader>bn", dap.down, { desc = "Debug: DAP Stack DOWN" })
 
 -- configurations
 dap.configurations.python = {
@@ -142,7 +148,7 @@ dap.configurations.go = {
 				if vim.fn.filereadable(currentfile_test) == 1 then
 					return GetTestFunctionNames(currentfile_test)
 				else
-					return { "-test.v" }
+					return { "-v" }
 				end
 			end
 		end,
@@ -155,7 +161,7 @@ dap.configurations.go = {
 		program = function()
 			return "${fileDirname}"
 		end,
-		-- args = { "-test.v" },
+		args = { "-v" },
 	},
 }
 
@@ -287,6 +293,7 @@ dapui.setup({
 				{ id = "repl", size = 1.0 },
 				{ id = "breakpoints", size = 0.25 },
 				{ id = "scopes", size = 0.25 },
+				{ id = "stacks", size = 0.25 },
 			},
 			size = 100, -- Height of the bottom panel
 			position = "right",
@@ -296,9 +303,16 @@ dapui.setup({
 				{ id = "repl", size = 1.0 },
 				{ id = "breakpoints", size = 0.25 },
 				{ id = "scopes", size = 0.25 },
+				{ id = "stacks", size = 0.25 },
 			},
 			size = 25, -- Height of the bottom panel
 			position = "bottom",
+		},
+	},
+	element_mappings = {
+		stacks = {
+			open = "<CR>", -- Open the current frame in the editor
+			expand = "o", -- Close the current frame
 		},
 	},
 })
@@ -383,4 +397,9 @@ end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "<Left>", function()
 	require("dap").step_out()
+end, { noremap = true, silent = true })
+
+-- backtrace
+vim.keymap.set("n", "<leader>t", function()
+	require("dap.ui.variables").scopes()
 end, { noremap = true, silent = true })
