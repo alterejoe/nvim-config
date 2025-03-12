@@ -287,26 +287,56 @@ require("neodev").setup({
 
 local dapui = require("dapui")
 dapui.setup({
+	-- layouts = {
+	-- 	{
+	-- 		elements = {
+	-- 			{ id = "repl", size = 1.0, position = "left" },
+	-- 			{ id = "breakpoints", size = 0.25 },
+	-- 			{ id = "scopes", size = 0.25 },
+	-- 			{ id = "stacks", size = 0.25 },
+	-- 		},
+	-- 		size = 100, -- Height of the bottom panel
+	-- 		position = "right",
+	-- 	},
+	-- 	{
+	-- 		elements = {
+	-- 			{ id = "repl", size = 1.0 },
+	-- 			{ id = "breakpoints", size = 0.25 },
+	-- 			{ id = "scopes", size = 0.25 },
+	-- 			{ id = "stacks", size = 0.25 },
+	-- 		},
+	-- 		size = 25, -- Height of the bottom panel
+	-- 		position = "bottom",
+	-- 	},
+	-- },
 	layouts = {
 		{
 			elements = {
-				{ id = "repl", size = 1.0 },
-				{ id = "breakpoints", size = 0.25 },
-				{ id = "scopes", size = 0.25 },
-				{ id = "stacks", size = 0.25 },
+				{ id = "console", size = 0.5 },
+				{ id = "repl", size = 0.5 },
 			},
-			size = 100, -- Height of the bottom panel
 			position = "right",
+			size = 50,
 		},
 		{
 			elements = {
-				{ id = "repl", size = 1.0 },
-				{ id = "breakpoints", size = 0.25 },
-				{ id = "scopes", size = 0.25 },
-				{ id = "stacks", size = 0.25 },
+				{ id = "scopes", size = 0.50 },
+				{ id = "breakpoints", size = 0.20 },
+				{ id = "stacks", size = 0.15 },
+				{ id = "watches", size = 0.15 },
 			},
-			size = 25, -- Height of the bottom panel
+			position = "right",
+			size = 65,
+		},
+		{
+			elements = {
+				{ id = "scopes", size = 0.50 },
+				{ id = "breakpoints", size = 0.20 },
+				{ id = "stacks", size = 0.15 },
+				{ id = "watches", size = 0.15 },
+			},
 			position = "bottom",
+			size = 25,
 		},
 	},
 	element_mappings = {
@@ -327,25 +357,59 @@ end
 function CloseDap()
 	dapui.close()
 end
+
 ---- keybinds
 local dapopen = false
+local layout = nil
 vim.keymap.set("n", "<leader>d", function()
 	if dapopen then
-		CloseDap()
-		dapopen = false
+		-- CloseDap()
+		-- dapopen = false
+		if layout == 1 then
+			CloseDap()
+			dapopen = false
+		else
+			OpenDap(1)
+			layout = 1
+		end
 	else
 		OpenDap(1)
+		layout = 1
+		dapopen = true
+	end
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader><c-d>", function()
+	if dapopen then
+		-- CloseDap()
+		-- dapopen = false
+		-- -- OpenDap(2)
+		if layout == 2 then
+			CloseDap()
+			dapopen = false
+		else
+			OpenDap(2)
+			layout = 2
+		end
+	else
+		OpenDap(2)
+		layout = 2
 		dapopen = true
 	end
 end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>h", function()
 	if dapopen then
-		CloseDap()
-		-- dapui.close()
-		dapopen = false
+		if layout == 3 then
+			CloseDap()
+			dapopen = false
+		else
+			OpenDap(3)
+			layout = 3
+		end
 	else
-		OpenDap(2)
+		OpenDap(3)
+		layout = 3
 		dapopen = true
 	end
 end, { noremap = true, silent = true })
