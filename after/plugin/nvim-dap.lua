@@ -73,7 +73,10 @@ local goserverdeps = function()
 	local cwd = vim.fn.getcwd()
 	local result = vim.fn.system("templ generate -path=" .. cwd)
 	print("templ generate: ", result)
-	result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css")
+	print("CWD" .. cwd)
+	result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css --cwd " .. cwd)
+	-- npx postcss input.css -o output.css
+	-- result = vim.fn.system("npx postcss ./ui/static/globals.css -o ./ui/static/output.css")
 	print("tailwindcss: ", result)
 end
 
