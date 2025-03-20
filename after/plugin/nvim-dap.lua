@@ -319,7 +319,7 @@ dapui.setup({
 				{ id = "repl", size = 0.5 },
 			},
 			position = "right",
-			size = 50,
+			size = 100,
 		},
 		{
 			elements = {
@@ -467,6 +467,21 @@ vim.keymap.set("n", "<Left>", function()
 end, { noremap = true, silent = true })
 
 -- backtrace
+-- vim.keymap.set("n", "<leader>t", function()
+-- 	require("dap.ui.variables").scopes()
+-- end, { noremap = true, silent = true })
+
+-- control left
+vim.keymap.set("n", "<C-Left>", function()
+	require("dap").up()
+end, { noremap = true, silent = true })
+
+-- control right
+vim.keymap.set("n", "<C-Right>", function()
+	require("dap").down()
+end, { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>t", function()
-	require("dap.ui.variables").scopes()
+	local frames = require("dap.ui.widgets").frames
+	print(vim.inspect(frames))
 end, { noremap = true, silent = true })
