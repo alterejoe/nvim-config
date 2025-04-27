@@ -130,3 +130,10 @@ vim.keymap.set("n", "L", function()
 	-- split horizontal
 	vim.api.nvim_command("e")
 end, { noremap = true, silent = true })
+
+-- simple keybind to open notes
+local notespath = "~/Notes/_fleeting.md"
+vim.keymap.set("n", "<leader>nn", function()
+	-- split horizontal
+	vim.api.nvim_command("e " .. notespath)
+end, { noremap = true, silent = true })

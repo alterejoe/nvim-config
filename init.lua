@@ -35,8 +35,10 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 		end
 	end,
 })
--- set opening window to ~/Notes/_todo.md
-vim.cmd("e ~/Notes/_todo.md")
+-- set opening window to ~/Notes/_todo.md and scroll to bottom of the screen
+vim.cmd("e ~/Notes/_fleeting.md ")
+-- scroll to bottom of the screen
+
 -- vim enter autocmd
 
 vim.api.nvim_create_augroup("VimEnter", { clear = true })
@@ -50,5 +52,5 @@ vim.api.nvim_create_augroup("VimEnter", { clear = true })
 -- 	end,
 -- })
 
-vim.cmd("AWStart")
-vim.cmd("AWStatus")
+-- vim.cmd("AWStart")
+-- vim.cmd("AWStatus")

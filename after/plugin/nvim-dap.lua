@@ -70,14 +70,12 @@ dap.configurations.rust = {
 -- end
 
 local goserverdeps = function()
-	local cwd = vim.fn.getcwd()
-	local result = vim.fn.system("templ generate -path=" .. cwd)
-	print("templ generate: ", result)
-	print("CWD" .. cwd)
-	result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css --cwd " .. cwd)
-	-- npx postcss input.css -o output.css
-	-- result = vim.fn.system("npx postcss ./ui/static/globals.css -o ./ui/static/output.css")
-	print("tailwindcss: ", result)
+	-- local cwd = vim.fn.getcwd()
+	-- local result = vim.fn.system("templ generate -path=" .. cwd)
+	-- print("templ generate: ", result)
+	-- -- needed if not using local
+	-- result = vim.fn.system("npx @tailwindcss/cli -i ./ui/static/globals.css -o ./ui/static/output.css --cwd " .. cwd)
+	-- print("tailwindcss: ", result)
 end
 
 local function GetTestFunctionNames(filepath)
@@ -105,64 +103,27 @@ local function GetTestFunctionNames(filepath)
 end
 
 dap.configurations.go = {
-	-- {
-	-- 	type = "delve",
-	-- 	name = "Debug",
-	-- 	request = "launch",
-	-- 	program = "${file}",
-	-- },
-	-- {
-	-- 	type = "delve",
-	-- 	name = "Debug test", -- configuration for debugging test files
-	-- 	request = "launch",
-	-- 	mode = "test",
-	-- 	program = "${file}",
-	-- },
-	-- works with go.mod packages and sub packages
 	{
 		type = "dlv_spawn",
-		name = "Run normally",
+		name = "Test main.go w/ deps",
 		request = "launch",
 		mode = "debug",
 		program = function()
+			-- local cwd = vim.fn.getcwd()
+			-- return "${workspaceFolder}"
+			print("dap_path: ", vim.g.dap_path)
 			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
-		cwd = "${workspaceFolder}",
+		args = { "-v" },
 	},
 	{
 		type = "dlv_spawn",
-		name = "Debug test current file",
+		name = "Test main.go w/o tailwind and templ",
 		request = "launch",
-		mode = "test",
-		program = "${fileDirname}",
-		-- program = function() end,
-		-- args = { "-v" },
-		-- only test current file
-		-- args = { "-test.v", "-test.run", "Test" },
-		args = function()
-			local current_file = vim.fn.expand("%:t")
-			local isTestFile = string.match(current_file, "_test.go")
-			if isTestFile then
-				local current_file_path = vim.fn.expand("%:p")
-				return GetTestFunctionNames(current_file_path)
-			else
-				local currentfile_test = vim.fn.expand("%:p:r") .. "_test.go"
-				if vim.fn.filereadable(currentfile_test) == 1 then
-					return GetTestFunctionNames(currentfile_test)
-				else
-					return { "-v" }
-				end
-			end
-		end,
-	},
-	{
-		type = "dlv_spawn",
-		name = "Debug test current folder",
-		request = "launch",
-		mode = "test",
+		mode = "debug",
 		program = function()
-			return "${fileDirname}"
+			return "./cmd/"
 		end,
 		args = { "-v" },
 	},
@@ -170,69 +131,37 @@ dap.configurations.go = {
 
 dap.configurations.templ = {
 	{
-
 		type = "dlv_spawn",
-		name = "Debug test (go.mod)",
+		name = "Test main.go w/ deps",
 		request = "launch",
 		mode = "debug",
 		program = function()
+			-- local cwd = vim.fn.getcwd()
+			-- return "${workspaceFolder}"
+			print("dap_path: ", vim.g.dap_path)
 			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
-		-- program = vim.g.dap_path or "./cmd/",
-
-		cwd = "${workspaceFolder}",
+		args = { "-v" },
 	},
 }
 
 dap.configurations.javascript = {
 	{
-
 		type = "dlv_spawn",
-		name = "Debug test (go.mod)",
+		name = "Test main.go w/ deps",
 		request = "launch",
 		mode = "debug",
 		program = function()
 			-- local cwd = vim.fn.getcwd()
-			-- local result = vim.fn.system("templ generate")
-			-- print("templ generate: ", result)
-			local cwd = vim.fn.getcwd()
+			-- return "${workspaceFolder}"
+			print("dap_path: ", vim.g.dap_path)
 			goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
-		-- program = vim.g.dap_path or "./cmd/",
-
-		cwd = "${workspaceFolder}",
+		args = { "-v" },
 	},
 }
-
---- adapters
-dap.adapters.delve = function(callback, config)
-	if config.mode == "remote" and config.request == "attach" then
-		callback({
-			type = "server",
-			host = config.host or "127.0.0.1",
-			port = config.port or "38697",
-			options = {
-				args = { "--log-output=rpc" }, -- Avoids escape codes in logs
-			},
-		})
-	else
-		callback({
-			type = "server",
-			port = "${port}",
-			executable = {
-				command = "dlv",
-				args = { "dap", "-l", "127.0.0.1:${port}", "--log" },
-				detached = vim.fn.has("win32") == 0,
-				-- detached = false,
-			},
-			options = {
-				args = { "--log-output=rpc -gcflags='all=-N -l'" }, -- Avoids escape codes in logs
-			},
-		})
-	end
-end
 
 dap.adapters.dlv_spawn = function(callback)
 	local stdout = vim.loop.new_pipe(false)
