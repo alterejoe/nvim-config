@@ -81,24 +81,17 @@ end
 local function GetTestFunctionNames(filepath)
 	local tests = {}
 	local lines = vim.fn.readfile(filepath)
-	-- local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
 	for _, line in ipairs(lines) do
-		-- print("line: ", line)
-		-- local funcfound = string.find(line, "func")
-		-- if funcfound then
-		-- 	local testfound = string.find(line, "Test")
-		-- 	if testfound then
-		local testname = string.match(line, "Test[%w_]+")
-		-- print("testname: ", testname)
+		local testname = string.match(line, "Test[%w_]+") -- print("testname: ", testname)
 		if testname then
 			table.insert(tests, testname)
 		end
 	end
 	if #tests > 0 then
 		local pattern = "^(" .. table.concat(tests, "|") .. ")$"
-		return { "-test.v", "-test.run", pattern }
+		return { "--output", "/dev/null", "-test.v", "-test.run", pattern }
 	else
-		return { "-test.v" }
+		return { "--output", "/dev/null", "-test.v" }
 	end
 end
 
@@ -112,20 +105,29 @@ dap.configurations.go = {
 			-- local cwd = vim.fn.getcwd()
 			-- return "${workspaceFolder}"
 			print("dap_path: ", vim.g.dap_path)
-			goserverdeps()
+			-- goserverdeps()
 			return vim.g.dap_path or "./cmd/"
 		end,
 		args = { "-v" },
 	},
 	{
 		type = "dlv_spawn",
-		name = "Test main.go w/o tailwind and templ",
+		name = "Run main.go w/o tailwind and templ",
 		request = "launch",
 		mode = "debug",
 		program = function()
 			return "./cmd/"
 		end,
 		args = { "-v" },
+	},
+	{
+		type = "dlv_spawn",
+		name = "Test file",
+		request = "launch",
+		mode = "test",
+		program = function()
+			return vim.fn.expand("%:p:h")
+		end,
 	},
 }
 
