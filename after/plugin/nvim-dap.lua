@@ -127,6 +127,22 @@ dap.configurations.go = {
 		end,
 		args = { "-v" },
 	},
+	{
+		type = "dlv_spawn",
+		name = "Run test",
+		request = "launch",
+		mode = "test",
+		program = function()
+			return vim.fn.expand("%:p:h")
+		end,
+		args = function()
+			local filepath = vim.fn.expand("%:p")
+			print("filepath: ", filepath)
+			local args = GetTestFunctionNames(filepath)
+			print("args: ", args)
+			return args
+		end,
+	},
 }
 
 dap.configurations.templ = {
