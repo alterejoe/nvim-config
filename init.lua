@@ -54,3 +54,4 @@ vim.api.nvim_create_augroup("VimEnter", { clear = true })
 
 -- vim.cmd("AWStart")
 -- vim.cmd("AWStatus")
+vim.o.timeoutlen = 1000
