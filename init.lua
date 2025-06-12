@@ -36,7 +36,12 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 	end,
 })
 -- set opening window to ~/Notes/_todo.md and scroll to bottom of the screen
-vim.cmd("e ~/Notes/_fleeting.md ")
+-- if Notes is unavailable, open ~/notes/_fleeting.md
+if vim.fn.isdirectory("~/Notes") == 1 then
+	vim.cmd("e ~/Notes/_todo.md")
+else
+	vim.cmd("e ~/notes/_fleeting.md")
+end
 -- scroll to bottom of the screen
 
 -- vim enter autocmd
