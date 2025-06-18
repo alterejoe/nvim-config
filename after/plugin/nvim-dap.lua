@@ -20,6 +20,19 @@ dap.configurations.python = {
 			return pythonpath
 		end,
 	},
+	{
+		type = "python",
+		request = "launch",
+		name = "Launch root/main.py",
+		program = function()
+			return vim.fn.getcwd() .. "/" .. "main.py"
+		end,
+		pythonPath = function()
+			SourceConfig()
+			pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			return pythonpath
+		end,
+	},
 }
 
 dap.configurations.gdscript = {
@@ -105,7 +118,7 @@ end
 dap.configurations.go = {
 	{
 		type = "dlv_spawn",
-		name = "Test main.go w/ deps",
+		name = "cmd/main.go w/ deps",
 		request = "launch",
 		mode = "debug",
 		program = function()
@@ -119,7 +132,7 @@ dap.configurations.go = {
 	},
 	{
 		type = "dlv_spawn",
-		name = "Test main.go w/o tailwind and templ",
+		name = "cmd/main.go w/o tailwind and templ",
 		request = "launch",
 		mode = "debug",
 		program = function()
@@ -129,7 +142,7 @@ dap.configurations.go = {
 	},
 	{
 		type = "dlv_spawn",
-		name = "Run test",
+		name = "Test current file",
 		request = "launch",
 		mode = "test",
 		program = function()
@@ -141,6 +154,36 @@ dap.configurations.go = {
 			local args = GetTestFunctionNames(filepath)
 			print("args: ", args)
 			return args
+		end,
+	},
+	{
+		type = "dlv_spawn",
+		name = "Run single file",
+		request = "launch",
+		mode = "debug",
+		program = function()
+			print(vim.fn.expand("%:p:h"))
+			local cwd = vim.fn.getcwd()
+			print("cwd: ", cwd)
+			return vim.fn.expand("%:p:h")
+		end,
+		cwd = function()
+			local cwd = vim.fn.getcwd()
+		end,
+	},
+	{
+		type = "dlv_spawn",
+		name = "Run main.go within current directory",
+		request = "launch",
+		mode = "debug",
+		program = function()
+			local cwd = vim.fn.getcwd()
+			print("Current working directory: ", cwd)
+			return cwd .. "/"
+		end,
+		cwd = function()
+			local filedir = vim.fn.expand("%:p:h")
+			return filedir
 		end,
 	},
 }
