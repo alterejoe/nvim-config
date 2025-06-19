@@ -22,3 +22,25 @@ require("telescope").setup({
 		},
 	},
 })
+
+require("telescope").load_extension("git_worktree")
+
+vim.keymap.set(
+	"n",
+	"<leader>tc",
+	-- "<CMD>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>",
+	function()
+		require("telescope").extensions.git_worktree.git_worktrees()
+	end,
+	{ desc = "Telescope Git Worktrees" }
+)
+vim.keymap.set(
+	"n",
+	"<leader>ts",
+	-- "<CMD>lua require('git-worktree').extensions.git_worktree.switch_worktree()<CR>",
+	function()
+		require("git-worktree").extensions.git_worktree.switch_worktree()
+	end,
+
+	{ desc = "Switch Git Worktree" }
+)

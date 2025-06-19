@@ -128,7 +128,7 @@ end, { noremap = true, silent = true })
 -- reload file for external changes
 vim.keymap.set("n", "L", function()
 	-- split horizontal
-	vim.api.nvim_command("e")
+	vim.cmd("edit!")
 end, { noremap = true, silent = true })
 
 -- simple keybind to open notes
