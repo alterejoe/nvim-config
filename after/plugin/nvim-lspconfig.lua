@@ -93,6 +93,22 @@ lspconfig["marksman"].setup({
 	filetypes = { "markdown" },
 })
 
+-- lspconfig["ltex"].setup({
+-- 	capabilities = capabilities,
+-- 	filetypes = { "markdown", "text", "latex" },
+-- 	settings = {
+-- 		ltex = {
+-- 			language = "en-US",
+-- 			diagnosticSeverity = "information",
+-- 			setenceCacheSize = 5000,
+-- 			enabled = { "markdown", "text", "latex" },
+-- 			-- dictionary = {
+-- 			-- 	["en-US"] = { "/path/to/dictionary.txt" },
+-- 			-- },
+-- 		},
+-- 	},
+-- })
+
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 
