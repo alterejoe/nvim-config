@@ -278,6 +278,9 @@ require("neodev").setup({
 
 local dapui = require("dapui")
 dapui.setup({
+	floating = {
+		border = "single", -- Border style for floating windows
+	},
 	-- layouts = {
 	-- 	{
 	-- 		elements = {
@@ -365,6 +368,7 @@ vim.keymap.set("n", "<leader>d", function()
 		end
 	else
 		OpenDap(1)
+		vim.cmd("highlight VertSplit guifg=#B6B6B6 guibg=NONE") -- bright white line
 		layout = 1
 		dapopen = true
 	end
