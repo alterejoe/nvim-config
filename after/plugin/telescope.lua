@@ -22,3 +22,13 @@ require("telescope").setup({
 	-- 	},
 	-- },
 })
+
+vim.keymap.set(
+	"n",
+	"<leader>tc",
+	-- "<CMD>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>",
+	function()
+		require("telescope").extensions.git_worktree.git_worktrees()
+	end,
+	{ desc = "Telescope Git Worktrees" }
+)

@@ -24,7 +24,7 @@ end
 
 require(USER .. ".lazy")
 require(USER .. ".core")
-require(USER .. ".custom")
+-- require(USER .. ".custom")
 
 vim.api.nvim_create_augroup("SetRelativeNumber", { clear = true })
 vim.api.nvim_create_autocmd({ "BufRead" }, {
