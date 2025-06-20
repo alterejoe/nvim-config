@@ -42,21 +42,4 @@ if vim.fn.isdirectory("~/Notes") == 1 then
 else
 	vim.cmd("e ~/notes/_fleeting.md")
 end
--- scroll to bottom of the screen
-
--- vim enter autocmd
-
-vim.api.nvim_create_augroup("VimEnter", { clear = true })
--- vim.api.nvim_create_autocmd({ "VimEnter" }, {
--- 	group = "VimEnter",
--- 	callback = function()
--- 		local _todopath = "~/Notes/_todo.md"
--- 		vim.bo.filetype = "markdown"
---
--- 		vim.cmd("wincmd w")
--- 	end,
--- })
-
--- vim.cmd("AWStart")
--- vim.cmd("AWStatus")
 vim.o.timeoutlen = 1000

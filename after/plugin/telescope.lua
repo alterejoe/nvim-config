@@ -11,14 +11,14 @@ vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" 
 -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })- vim.g.fzf_vim_buffers_jump = 1
 --
 require("telescope").setup({
-	defaults = {
-		layout_strategy = "vertical",
-		layout_config = {
-			anchor = "W",
-			height = vim.o.lines, -- maximally available lines
-			width = 0.6, -- maximally available columns
-			prompt_position = "top",
-			preview_height = 0.6, -- 60% of available lines
-		},
-	},
+	-- defaults = {
+	-- 	layout_strategy = "vertical",
+	-- 	layout_config = {
+	-- 		anchor = "W",
+	-- 		height = vim.o.lines, -- maximally available lines
+	-- 		width = 0.6, -- maximally available columns
+	-- 		prompt_position = "top",
+	-- 		preview_height = 0.6, -- 60% of available lines
+	-- 	},
+	-- },
 })
