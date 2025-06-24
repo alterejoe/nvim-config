@@ -15,6 +15,7 @@ conform.setup({
 		template = { "gohtml" },
 		-- template = { "prettierd" },
 		json = { "prettierd" },
+		typescript = { "prettierd" },
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
 		-- sql = { "sqlfmt" },
