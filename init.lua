@@ -37,9 +37,10 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
 })
 -- set opening window to ~/Notes/_todo.md and scroll to bottom of the screen
 -- if Notes is unavailable, open ~/notes/_fleeting.md
+local notespath = "python/_fleeting.md"
 if vim.fn.isdirectory("~/Notes") == 1 then
-	vim.cmd("e ~/Notes/_todo.md")
+	vim.cmd("e ~/Notes/" .. notespath)
 else
-	vim.cmd("e ~/notes/_fleeting.md")
+	vim.cmd("e ~/notes/" .. notespath)
 end
 vim.o.timeoutlen = 1000
