@@ -42,6 +42,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 		vim.fn.system({ "gofmt", "-s", "-w", file })
 		-- Run custom fmt command
 		vim.fn.system({ "templ", "fmt", file })
+
+		-- prettier sort tailwind
+		-- tailwind-sorter --fix ./src/
+		local result = vim.fn.system({ "go-tailwind-sorter", "--fix", "." })
+		print(result)
+
 		-- Reload the file in Neovim
 		vim.cmd("edit!")
 	end,
