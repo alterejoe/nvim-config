@@ -16,7 +16,7 @@ dap.configurations.python = {
 		program = "${file}",
 		pythonPath = function()
 			SourceConfig()
-			pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			local pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
 			return pythonpath
 		end,
 	},
@@ -29,7 +29,25 @@ dap.configurations.python = {
 		end,
 		pythonPath = function()
 			SourceConfig()
-			pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			local pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			return pythonpath
+		end,
+	},
+	{
+		type = "python",
+		name = "run fastapi app",
+		request = "launch",
+		module = "uvicorn",
+		args = {
+			"main:app", -- Adjust this to your FastAPI app entry point
+			"--host",
+			"127.0.0.1",
+			"--port",
+			"8000",
+		},
+		pythonPath = function()
+			SourceConfig()
+			local pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
 			return pythonpath
 		end,
 	},
