@@ -94,22 +94,6 @@ lspconfig["marksman"].setup({
 	filetypes = { "markdown" },
 })
 
--- lspconfig["ltex"].setup({
--- 	capabilities = capabilities,
--- 	filetypes = { "markdown", "text", "latex" },
--- 	settings = {
--- 		ltex = {
--- 			language = "en-US",
--- 			diagnosticSeverity = "information",
--- 			setenceCacheSize = 5000,
--- 			enabled = { "markdown", "text", "latex" },
--- 			-- dictionary = {
--- 			-- 	["en-US"] = { "/path/to/dictionary.txt" },
--- 			-- },
--- 		},
--- 	},
--- })
-
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 
@@ -124,7 +108,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local opts = { buffer = ev.buf }
 		vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
-		vim.keymap.set("n", "<return>", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "<return>", function()
+			-- if filetype is oil.nvim
+			if vim.bo.filetype == "oil" then
+				return
+			end
+			vim.lsp.buf.definition()
+		end, opts)
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)

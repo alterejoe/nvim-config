@@ -27,7 +27,7 @@ cmp.setup({
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-space>"] = cmp.mapping.complete(),
 		["<esc>"] = cmp.mapping.abort(),
-		["<Tab>"] = cmp.mapping.confirm({ select = true }),
+		["<c-a>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 		["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
 		["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 	}),
@@ -37,6 +37,7 @@ cmp.setup({
 		{ name = "buffer" },
 		{ name = "path" },
 		{ name = "treesitter" },
+		{ name = "codium" },
 	}),
 	formatting = {
 		format = function(entry, vim_item)
