@@ -1,0 +1,5 @@
+require("keymaps.everyday")
+require("keymaps.terminal")
+require("keymaps.quit")
+require("keymaps.write")
+require("keymaps.notes")
