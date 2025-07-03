@@ -43,3 +43,5 @@ vim.o.encoding = "utf-8"
 -- Ensure hidden characters (like tabs) are displayed consistently
 vim.o.list = true
 vim.o.listchars = "tab:>-,trail:."
+
+vim.g.netrw_browsex_viewer = "/mnt/c/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"

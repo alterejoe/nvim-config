@@ -31,3 +31,15 @@
 -- 	end,
 -- }
 --
+return {
+	"monkoose/neocodeium",
+	event = "VeryLazy",
+	config = function()
+		local neocodeium = require("neocodeium")
+		neocodeium.setup({
+			root_dir = { ".git", "Makefile", ".env", "config.lua" },
+		})
+
+		vim.keymap.set("i", "<A-f>", neocodeium.accept)
+	end,
+}
