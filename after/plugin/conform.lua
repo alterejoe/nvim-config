@@ -11,7 +11,7 @@ conform.setup({
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
 		-- javascript = { "biome" },
-		javascript = { "eslint_d" },
+		javascript = { "biome" },
 		template = { "gohtml" },
 		-- template = { "prettierd" },
 		json = { "prettierd" },

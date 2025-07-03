@@ -113,29 +113,12 @@ vim.keymap.set("n", "X", function()
 	vim.api.nvim_command("source $MYVIMRC")
 end)
 
-vim.keymap.set("n", "<Tab>m", ":!make<CR>", { noremap = true, silent = true })
-
 vim.keymap.set("n", "<C-j>", function()
 	-- ctrl ww
 	vim.cmd("wincmd w")
 end)
 
--- vim.keymap.set("n", "<C-o>", "<c-6>", { noremap = true, silent = true })
-
 vim.keymap.set("n", "<M-o>", "<c-^>", { noremap = true, silent = true })
-
--- keymap with  tab e it will split a terminal to the right and type the words scrapy crawl vs_spider
-vim.keymap.set(
-	"n",
-	"<Tab>e",
-	":botright split term<CR>:term scrapy crawl vs_spider<CR>",
-	{ noremap = true, silent = true }
-)
-
-vim.keymap.set("n", "<C-w>V", function()
-	-- split horizontal
-	vim.api.nvim_command("split")
-end, { noremap = true, silent = true })
 
 -- reload file for external changes
 vim.keymap.set("n", "L", function()

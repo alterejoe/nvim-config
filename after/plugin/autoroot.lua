@@ -1,4 +1,4 @@
-function root(currentfilepath, skip)
+local function root(currentfilepath, skip)
 	print("Current path: " .. currentfilepath)
 	local originalfilepath = currentfilepath
 	local patterns = { ".git/", "config.lua", ".env/", "index.norg" }
@@ -31,11 +31,11 @@ function root(currentfilepath, skip)
 	end
 end
 
-function fileroot(path)
+local function fileroot(path)
 	root(path, false)
 end
 
-function acwriteroot(path)
+local function acwriteroot(path)
 	-- remove oil:// from the start of the path
 	local cleanpath = string.gsub(path, "oil://", "")
 	root(cleanpath, false)

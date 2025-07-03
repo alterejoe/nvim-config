@@ -1,34 +1,30 @@
--- vim.api.nvim_set_keymap("n", "<Leader>ff", ":FzfLua <CR>", { noremap = true, silent = true })
--- -- vim.api.nvim_set_keymap('n', '<Leader>fg', ':GFiles<CR>', { noremap = true, silent = true })
--- -- vim.api.nvim_set_keymap('n', '<Leader>fb', ':Buffers<CR>', { noremap = true, silent = true })
--- vim.api.nvim_set_keymap("n", "<Leader>fg", ":FzfLua grep<CR>", { noremap = true, silent = true })
---
--- -- g:fzf_vim.buffers_jump = 1
+require("telescope").setup({
+	extensions = {
+		fzf = {
+			fuzzy = true, -- false will only do exact matching
+			override_generic_sorter = true, -- override the generic sorter
+			override_file_sorter = true, -- override the file sorter
+			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+			-- the default case_mode is "smart_case"
+		},
+	},
+})
+
+require("telescope").load_extension("fzf")
+require("telescope").load_extension("messages")
+require("telescope").load_extension("recent_files")
+require("telescope").load_extension("frecency")
+
 local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+local recentfiles = require("telescope").extensions.recent_files
+vim.keymap.set("n", "<leader>F", builtin.find_files, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>ff", recentfiles.pick, { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
+vim.keymap.set("n", "<leader>fw", function()
+	local word = vim.fn.expand("<cword>")
+	require("telescope.builtin").live_grep({ default_text = word })
+end)
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 -- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })- vim.g.fzf_vim_buffers_jump = 1
 --
-require("telescope").setup({
-	-- defaults = {
-	-- 	layout_strategy = "vertical",
-	-- 	layout_config = {
-	-- 		anchor = "W",
-	-- 		height = vim.o.lines, -- maximally available lines
-	-- 		width = 0.6, -- maximally available columns
-	-- 		prompt_position = "top",
-	-- 		preview_height = 0.6, -- 60% of available lines
-	-- 	},
-	-- },
-})
-
-vim.keymap.set(
-	"n",
-	"<leader>tc",
-	-- "<CMD>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>",
-	function()
-		require("telescope").extensions.git_worktree.git_worktrees()
-	end,
-	{ desc = "Telescope Git Worktrees" }
-)
+--
