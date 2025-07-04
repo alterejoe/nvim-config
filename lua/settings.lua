@@ -45,3 +45,4 @@ vim.o.list = true
 vim.o.listchars = "tab:>-,trail:."
 
 vim.g.gruvbox_material_enable_italic = true
+vim.g.mapleader = " "

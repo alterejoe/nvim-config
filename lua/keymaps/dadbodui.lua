@@ -1,1 +1,1 @@
-vim.keymap.set("n", "<leader>p", ":DBUIToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>p", ":DBUIToggle<CR>", { silent = true })

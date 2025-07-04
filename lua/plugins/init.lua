@@ -45,11 +45,36 @@ require("paq")({
 	"L3MON4D3/LuaSnip", -- lua snip engine required as source for nvim-cmp
 	"saadparwaiz1/cmp_luasnip",
 	"petertriho/cmp-git", -- git source for nvim-cmp
+
+	-- nvim-dap debugger setup
+	"mfussenegger/nvim-dap", -- dep
+	"nvim-neotest/nvim-nio", -- dep
+	"rcarriga/nvim-dap-ui",
+
+	-- oil.nvim text editable file explorer
+	"stevearc/oil.nvim",
+	"echasnovski/mini.icons",
+
+	"folke/snacks.nvim", -- nice simple tools to fill out nvim
+	"feline-nvim/feline.nvim", -- nice status bar
+	"lambdalisue/vim-suda", -- very helpful write sudo within underprivalaged nvim
+	"mbbill/undotree", -- undo tree to see past changes and update
+
+	-- telescope and extensions
+	"nvim-telescope/telescope.nvim", -- telescope searching feature
+	"nvim-telescope/telescope-fzf-native.nvim", -- fzf extension ext
+	"d4wns-l1ght/telescope-messages.nvim", -- messages ext
+	"smartpde/telescope-recent-files", -- recent files ext
+	"nvim-telescope/telescope-frecency.nvim", -- frequent files ext
+
+	-- treesitter for highlighting
+	"nvim-treesitter/nvim-treesitter",
 })
 
 vim.cmd("PaqInstall")
 
 -- require package installation first
+require("plugins.configs.treesitter")
 require("plugins.configs.mason")
 require("plugins.configs.luarocks")
 require("plugins.configs.colorscheme")
@@ -57,6 +82,10 @@ require("plugins.configs.colorscheme")
 require("plugins.configs.bqf")
 require("plugins.configs.conform")
 require("plugins.configs.gitworktree")
+require("plugins.configs.lsp-config")
 require("plugins.configs.neocodeium")
 require("plugins.configs.neodev")
 require("plugins.configs.nvim-cmp")
+require("plugins.configs.oil")
+
+print("Plugins imported successfully")
