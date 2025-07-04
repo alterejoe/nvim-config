@@ -1,4 +1,3 @@
-print("Hello, world!")
 require("settings")
 require("autocmds")
 require("keymaps")
