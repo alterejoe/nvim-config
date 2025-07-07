@@ -1,8 +1,3 @@
-local telescopefzf = require("nvim-telescope/telescope-fzf-native.nvim")
-telescopefzf.setup({
-	build = "make",
-})
-
 local telescope = require("telescope")
 
 telescope.setup({
@@ -22,6 +17,7 @@ telescope.load_extension("messages")
 telescope.load_extension("recent_files")
 telescope.load_extension("frecency")
 telescope.load_extension("git_worktree")
+telescope.load_extension("grapple")
 
 local builtin = require("telescope.builtin")
 local recentfiles = require("telescope").extensions.recent_files

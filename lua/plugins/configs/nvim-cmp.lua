@@ -26,7 +26,7 @@ cmp.setup({
 		{ name = "buffer" },
 		{ name = "path" },
 		{ name = "treesitter" },
-		-- { name = "codium" },
+		{ name = "neocodeium" },
 	}),
 	formatting = {
 		format = function(entry, vim_item)

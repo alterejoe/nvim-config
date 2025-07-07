@@ -14,7 +14,8 @@ require("paq")({
 	"vhyrro/luarocks.nvim",
 
 	"kevinhwang91/nvim-bqf", -- better quickfix list search/replace/prettier
-	"monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources
+	{ "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
+	-- "monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources}
 	"sainnhe/gruvbox-material", -- color theme
 	"numToStr/Comment.nvim", -- nicer comments gcc
 	"stevearc/conform.nvim", -- formatter
@@ -62,7 +63,7 @@ require("paq")({
 
 	-- telescope and extensions
 	"nvim-telescope/telescope.nvim", -- telescope searching feature
-	"nvim-telescope/telescope-fzf-native.nvim", -- fzf extension ext
+	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" }, -- fzf extension ext
 	"d4wns-l1ght/telescope-messages.nvim", -- messages ext
 	"smartpde/telescope-recent-files", -- recent files ext
 	"nvim-telescope/telescope-frecency.nvim", -- frequent files ext
@@ -86,6 +87,13 @@ require("plugins.configs.lsp-config")
 require("plugins.configs.neocodeium")
 require("plugins.configs.neodev")
 require("plugins.configs.nvim-cmp")
+require("plugins.configs.nvim-dap-adapters")
+require("plugins.configs.nvim-dap-configs")
+require("plugins.configs.nvim-dap-ui")
 require("plugins.configs.oil")
+require("plugins.configs.snacks")
+require("plugins.configs.statusbar")
+require("plugins.configs.telescope")
+require("plugins.configs.treesitter")
 
 print("Plugins imported successfully")

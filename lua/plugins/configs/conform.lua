@@ -7,6 +7,7 @@ conform.setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "black" },
+		-- python = { "pyproject-fmt" },
 		go = { "goimports" },
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },

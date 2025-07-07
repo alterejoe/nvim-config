@@ -15,6 +15,8 @@ local keymaps_modules = {
 	"keymaps.lsp-config",
 	"keymaps.undotree",
 	"keymaps.autoroot",
+	"keymaps.nvim-dap",
+	"keymaps.lazygit",
 }
 
 local errors = "Error requiring keymap modules: "

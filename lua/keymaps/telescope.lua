@@ -1,8 +1,8 @@
 local builtin = require("telescope.builtin")
 local recentfiles = require("telescope").extensions.recent_files
 
-vim.keymap.set("n", "<leader>F", builtin.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>ff", recentfiles.pick, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })
+vim.keymap.set("n", "<leader>rf", recentfiles.pick, { desc = "Telescope find files" })
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
 vim.keymap.set("n", "<leader>fw", function()
 	local word = vim.fn.expand("<cword>")

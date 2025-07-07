@@ -1,1 +1,3 @@
-require("luarocks-nvim")
+require("luarocks-nvim").setup({
+	rocks = { "jsregexp" },
+})

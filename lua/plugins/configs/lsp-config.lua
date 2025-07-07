@@ -1,5 +1,5 @@
 local lspconfig = require("lspconfig")
----
+
 local capabilities = vim.tbl_deep_extend(
 	"force",
 	vim.lsp.protocol.make_client_capabilities(),
@@ -42,6 +42,10 @@ setup_lsp_server("lua_ls", {
 		Lua = {
 			completion = {
 				callSnippet = "Replace",
+			},
+
+			diagnostics = {
+				globals = { "vim" },
 			},
 		},
 	},
