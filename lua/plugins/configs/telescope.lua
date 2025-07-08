@@ -1,5 +1,8 @@
 local telescope = require("telescope")
+local builtin = require("telescope.builtin")
 
+-- You dont need to set any of these options. These are the default ones. Only
+-- the loading is important
 telescope.setup({
 	extensions = {
 		fzf = {
@@ -11,25 +14,11 @@ telescope.setup({
 		},
 	},
 })
-
--- require("telescope").load_extension("fzf")
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+telescope.load_extension("fzf")
 telescope.load_extension("messages")
 telescope.load_extension("recent_files")
 telescope.load_extension("frecency")
-telescope.load_extension("git_worktree")
 telescope.load_extension("grapple")
-
-local builtin = require("telescope.builtin")
-local recentfiles = require("telescope").extensions.recent_files
-
-vim.keymap.set("n", "<leader>F", builtin.find_files, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>ff", recentfiles.pick, { desc = "Telescope find files" })
-vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope live grep" })
-vim.keymap.set("n", "<leader>fw", function()
-	local word = vim.fn.expand("<cword>")
-	require("telescope.builtin").live_grep({ default_text = word })
-end)
-vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
--- vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })- vim.g.fzf_vim_buffers_jump = 1
---
---
+telescope.load_extension("egrepify")

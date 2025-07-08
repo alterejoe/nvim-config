@@ -6,7 +6,6 @@ local keymaps_modules = {
 	"keymaps.everyday",
 	"keymaps.write",
 	"keymaps.notes",
-	"keymaps.messages",
 	"keymaps.nvim-cmp",
 	"keymaps.gitworktree",
 	"keymaps.grapple",

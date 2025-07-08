@@ -67,6 +67,7 @@ require("paq")({
 	"d4wns-l1ght/telescope-messages.nvim", -- messages ext
 	"smartpde/telescope-recent-files", -- recent files ext
 	"nvim-telescope/telescope-frecency.nvim", -- frequent files ext
+	"fdschmidt93/telescope-egrepify.nvim",
 
 	-- treesitter for highlighting
 	"nvim-treesitter/nvim-treesitter",
@@ -75,7 +76,6 @@ require("paq")({
 vim.cmd("PaqInstall")
 
 -- require package installation first
-require("plugins.configs.treesitter")
 require("plugins.configs.mason")
 require("plugins.configs.luarocks")
 require("plugins.configs.colorscheme")
