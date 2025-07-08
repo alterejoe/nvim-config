@@ -45,10 +45,10 @@ vim.keymap.set("n", "<leader>:", function()
 	grapple.select({ index = 8, scope = scope_type })
 end, { desc = "Select fourth tag" })
 
-vim.keymap.set("n", "<c-n>", function()
-	grapple.cycle_tags({ direction = "next", scope = scope_type })
-end, { desc = "Go to next tag" })
-
-vim.keymap.set("n", "<c-m>", function()
-	grapple.cycle_tags({ direction = "prev", scope = scope_type })
-end, { desc = "Go to previous tag" })
+-- vim.keymap.set("n", "<c-n>", function()
+-- 	grapple.cycle_tags({ direction = "next", scope = scope_type })
+-- end, { desc = "Go to next tag" })
+--
+-- vim.keymap.set("n", "<c-m>", function()
+-- 	grapple.cycle_tags({ direction = "prev", scope = scope_type })
+-- end, { desc = "Go to previous tag" })

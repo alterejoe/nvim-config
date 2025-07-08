@@ -54,6 +54,21 @@ dapui.setup({
 			position = "bottom",
 			size = 25,
 		},
+		{
+			elements = {
+				{ id = "repl" },
+			},
+			position = "right",
+			size = 100,
+		},
+
+		{
+			elements = {
+				{ id = "repl" },
+			},
+			position = "bottom",
+			size = 100,
+		},
 	},
 	element_mappings = {
 		stacks = {
