@@ -1,4 +1,4 @@
-local dapopen = false
+local dapopen = true
 local layoutindex = 4
 local layouts = { 1, 2, 3, 4 }
 
