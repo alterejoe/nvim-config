@@ -16,6 +16,7 @@ local keymaps_modules = {
 	"keymaps.autoroot",
 	"keymaps.nvim-dap",
 	"keymaps.lazygit",
+	"keymaps.replacer",
 }
 
 local errors = "Error requiring keymap modules: "

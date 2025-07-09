@@ -71,6 +71,9 @@ require("paq")({
 
 	-- treesitter for highlighting
 	"nvim-treesitter/nvim-treesitter",
+
+	-- quick fix replacer
+	"gabrielpoca/replacer.nvim",
 })
 
 vim.cmd("PaqInstall")
