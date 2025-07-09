@@ -8,7 +8,7 @@ local builtin = require("telescope.builtin")
 -- vim.keymap.set("n", "<leader>mm", telescope.extensions.messages.messages, { desc = "Telescope messages" })
 
 vim.keymap.set("n", "<leader>rf", function()
-	require("telescope").extensions.recent_files.recent_files({ cwd = vim.fn.getcwd() })
+	telescope.extensions.recent_files.recent_files({ cwd = vim.fn.getcwd() })
 end, { desc = "Telescope find recent files" })
 
 vim.keymap.set("n", "<leader>ff", function()
@@ -20,15 +20,17 @@ vim.keymap.set("n", "<leader>ff", function()
 end, { desc = "Telescope pick a file" })
 
 vim.keymap.set("n", "<leader>fg", function()
-	require("telescope").extensions.egrepify.egrepify({ cwd = vim.fn.getcwd() })
+	telescope.extensions.egrepify.egrepify({ cwd = vim.fn.getcwd(), qflist = true })
 end, { desc = "Telescope live grep" })
 
 vim.keymap.set("n", "<leader>mm", function()
-	require("telescope").extensions.messages.messages({ cwd = vim.fn.getcwd() })
+	telescope.extensions.messages.messages({ cwd = vim.fn.getcwd() })
 end, { desc = "Telescope messages" })
 
 vim.keymap.set("n", "<leader>fw", function()
 	local word = vim.fn.expand("<cword>")
-	require("telescope.builtin").live_grep({ default_text = word })
+	builtin.live_grep({ default_text = word, qflist = true })
 end)
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
+
+vim.keymap.set("n", "<leader>fp", builtin.pickers, { desc = "Telescope resume" })
