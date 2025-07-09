@@ -13,6 +13,11 @@ telescope.setup({
 			-- the default case_mode is "smart_case"
 		},
 	},
+	defaults = {
+		cache_picker = {
+			num_pickers = 5,
+		},
+	},
 })
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:

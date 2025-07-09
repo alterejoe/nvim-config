@@ -491,7 +491,7 @@ vim.keymap.set("n", "<C-Right>", function()
 	require("dap").down()
 end, { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>t", function()
-	local frames = require("dap.ui.widgets").frames
-	print(vim.inspect(frames))
-end, { noremap = true, silent = true })
+-- vim.keymap.set("n", "<leader>t", function()
+-- 	local frames = require("dap.ui.widgets").frames
+-- 	print(vim.inspect(frames))
+-- end, { noremap = true, silent = true })
