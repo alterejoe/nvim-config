@@ -14,7 +14,7 @@ require("paq")({
 	"vhyrro/luarocks.nvim",
 
 	"kevinhwang91/nvim-bqf", -- better quickfix list search/replace/prettier
-	-- { "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
+	{ "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
 	-- "monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources}
 	"sainnhe/gruvbox-material", -- color theme
 	"numToStr/Comment.nvim", -- nicer comments gcc
