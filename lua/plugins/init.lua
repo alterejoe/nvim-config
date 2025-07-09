@@ -50,7 +50,8 @@ require("paq")({
 	-- nvim-dap debugger setup
 	"mfussenegger/nvim-dap", -- dep
 	"nvim-neotest/nvim-nio", -- dep
-	"rcarriga/nvim-dap-ui",
+	-- "rcarriga/nvim-dap-ui",
+	"igorlfs/nvim-dap-view",
 
 	-- oil.nvim text editable file explorer
 	"stevearc/oil.nvim",
@@ -92,7 +93,8 @@ require("plugins.configs.neodev")
 require("plugins.configs.nvim-cmp")
 require("plugins.configs.nvim-dap-adapters")
 require("plugins.configs.nvim-dap-configs")
-require("plugins.configs.nvim-dap-ui")
+-- require("plugins.configs.nvim-dap-ui")
+require("plugins.configs.nvim-dap-view")
 require("plugins.configs.oil")
 require("plugins.configs.snacks")
 require("plugins.configs.statusbar")

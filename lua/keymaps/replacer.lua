@@ -1,5 +1,10 @@
-local opts = { save_on_write = false, rename_files = true }
-local replacer = require("replacer")
+function StandardReplacer()
+	local opts = { save_on_write = true, rename_files = true }
+	local replacer = require("replacer")
+	return opts, replacer
+end
+
+local opts, replacer = StandardReplacer()
 
 vim.keymap.set("n", "i", function()
 	if vim.bo.buftype == "quickfix" then

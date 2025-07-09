@@ -14,7 +14,8 @@ local keymaps_modules = {
 	"keymaps.lsp-config",
 	"keymaps.undotree",
 	"keymaps.autoroot",
-	"keymaps.nvim-dap",
+	-- "keymaps.nvim-dap",
+	"keymaps.nvim-dap-view",
 	"keymaps.lazygit",
 	"keymaps.replacer",
 }

@@ -11,7 +11,7 @@ local function toggle_layout()
 		dapopen = true
 	end
 end
-
+local dapui = require("dapui")
 local function cycle_layouts()
 	print("Layouts: ", layouts, "Current layout: ", layoutindex)
 	local current_index = vim.fn.index(layouts, layoutindex) + 1
@@ -24,10 +24,13 @@ local function cycle_layouts()
 	print("Dap layout: ", next_index)
 	layoutindex = next_index
 	if dapopen then
-		CloseDap()
-		OpenDap(layouts[layoutindex])
+		dapui.close()
+		dapui.open({ layout = layouts[layoutindex] })
+		-- CloseDap()
+		-- OpenDap(layouts[layoutindex])
 	else
-		OpenDap(layouts[layoutindex])
+		-- OpenDap(layouts[layoutindex])
+		dapui.open({ layout = layouts[layoutindex] })
 		dapopen = true
 	end
 end
@@ -37,3 +40,48 @@ vim.keymap.set("n", "<leader>d", function()
 end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader><c-d>", cycle_layouts, { noremap = true, silent = true })
+
+local terminate = false
+
+local dap = require("dap")
+dap.listeners.after.event_terminated["user_listener"] = function()
+	terminate = false
+end
+vim.keymap.set("n", "E", function()
+	if terminate == true then
+		dap.terminate()
+		return
+	else
+		require("dap").continue()
+		terminate = true
+		return
+	end
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>b", function()
+	require("dap").toggle_breakpoint()
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<c-n>", function()
+	vim.cmd("DapNew")
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<Right>", function()
+	require("dap").step_over()
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<Up>", function()
+	require("dap").step_into()
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<Left>", function()
+	require("dap").step_out()
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<C-Left>", function()
+	require("dap").up()
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<C-Right>", function()
+	require("dap").down()
+end, { noremap = true, silent = true })

@@ -1,4 +1,5 @@
 local dapui = require("dapui")
+-- dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
 dapui.setup({
 	floating = {
 		border = "single", -- Border style for floating windows

@@ -16,7 +16,3 @@ require("autocmds")
 require("keymaps")
 
 -- defer fn
-
-vim.defer_fn(function()
-	OpenDap(1)
-end, 500)
