@@ -56,7 +56,11 @@ require("dap-view").setup({
 		},
 	},
 })
-vim.keymap.set("n", "<leader>d", "<Cmd>DapViewToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>d", function()
+	-- vim.cmd("<Cmd>DapViewToggle<CR>")
+	vim.cmd("DapViewToggle")
+	-- vim.cmd("wincmd w")
+end, { noremap = true, silent = true })
 
 print("nvim-dap-view imported successfully")
 local terminate = false

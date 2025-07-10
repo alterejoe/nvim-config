@@ -21,12 +21,11 @@ cmp.setup({
 		["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 	}),
 	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
 		{ name = "luasnip" }, -- For luasnip users.
+		{ name = "nvim_lsp" },
+		{ name = "treesitter" },
 		{ name = "buffer" },
 		{ name = "path" },
-		{ name = "treesitter" },
-		{ name = "neocodeium" },
 	}),
 	formatting = {
 		format = function(entry, vim_item)

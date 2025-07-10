@@ -43,9 +43,12 @@ require("paq")({
 	"hrsh7th/cmp-path",
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/nvim-cmp",
-	"L3MON4D3/LuaSnip", -- lua snip engine required as source for nvim-cmp
-	"saadparwaiz1/cmp_luasnip",
 	"petertriho/cmp-git", -- git source for nvim-cmp
+
+	-- luasnip
+	"L3MON4D3/LuaSnip",
+	"rafamadriz/friendly-snippets",
+	"saadparwaiz1/cmp_luasnip",
 
 	-- nvim-dap debugger setup
 	"mfussenegger/nvim-dap", -- dep
@@ -69,7 +72,7 @@ require("paq")({
 	"smartpde/telescope-recent-files", -- recent files ext
 	"nvim-telescope/telescope-frecency.nvim", -- frequent files ext
 	"fdschmidt93/telescope-egrepify.nvim",
-
+	"benfowler/telescope-luasnip.nvim",
 	-- treesitter for highlighting
 	"nvim-treesitter/nvim-treesitter",
 
@@ -84,6 +87,7 @@ require("plugins.configs.mason")
 require("plugins.configs.luarocks")
 require("plugins.configs.colorscheme")
 
+require("plugins.configs.luasnip")
 require("plugins.configs.bqf")
 require("plugins.configs.conform")
 require("plugins.configs.gitworktree")
