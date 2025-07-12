@@ -1,5 +1,6 @@
 function StandardReplacer()
-	local opts = { save_on_write = true, rename_files = true }
+	-- keep false as this causes issues with bqf
+	local opts = { save_on_write = false, rename_files = true }
 	local replacer = require("replacer")
 	return opts, replacer
 end

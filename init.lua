@@ -6,6 +6,7 @@ function SourceConfig()
 		vim.cmd("source " .. config)
 	end
 end
+
 vim.diagnostic.config({
 	virtual_text = true,
 })

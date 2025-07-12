@@ -62,7 +62,6 @@ vim.keymap.set("n", "<leader>d", function()
 	-- vim.cmd("wincmd w")
 end, { noremap = true, silent = true })
 
-print("nvim-dap-view imported successfully")
 local terminate = false
 
 local dap = require("dap")

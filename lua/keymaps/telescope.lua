@@ -23,6 +23,14 @@ vim.keymap.set("n", "<leader>fg", function()
 	telescope.extensions.egrepify.egrepify({ cwd = vim.fn.getcwd(), qflist = true })
 end, { desc = "Telescope live grep" })
 
+vim.keymap.set("n", "<leader>fG", function()
+	-- egrepify the current file only
+	telescope.extensions.egrepify.egrepify({
+		search_dirs = { vim.fn.expand("%:p") },
+		qflist = true,
+	})
+end, { desc = "Telescope live grep" })
+
 vim.keymap.set("n", "<leader>mm", function()
 	telescope.extensions.messages.messages({ cwd = vim.fn.getcwd() })
 end, { desc = "Telescope messages" })
