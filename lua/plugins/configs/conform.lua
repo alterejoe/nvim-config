@@ -20,7 +20,7 @@ conform.setup({
 		typescript = { "prettierd" },
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
-		-- sql = { "sqlfmt" },
+		sql = { "sqlfmt" },
 	},
 	filter = function()
 		return true

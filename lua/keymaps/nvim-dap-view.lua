@@ -19,8 +19,6 @@ vim.keymap.set("n", "<leader>d", function()
 	-- vim.cmd("wincmd w")
 end, { noremap = true, silent = true })
 
-local terminate = false
-
 local dap = require("dap")
 dap.listeners.after.event_terminated["user_listener"] = function()
 	terminate = false
@@ -34,11 +32,15 @@ vim.keymap.set("n", "<c-n>", function()
 	vim.cmd("DapNew")
 end, { noremap = true, silent = true })
 
-local dap = require("dap")
-
+local terminate = false
 vim.keymap.set("n", "E", function()
-	dap.terminate()
-	vim.cmd("DapNew")
+	if terminate then
+		vim.cmd("DapNew")
+		terminate = true
+	else
+		dap.terminate()
+		terminate = false
+	end
 end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "<Right>", function()
