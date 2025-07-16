@@ -12,11 +12,11 @@ snacks.setup({
 	indent = { enabled = true },
 	input = { enabled = true },
 	picker = { enabled = true },
-	notifier = {
-		enabled = true,
-		timeout = 1000,
-		top_down = false,
-	},
+	-- notifier = {
+	-- 	enabled = true,
+	-- 	timeout = 1000,
+	-- 	top_down = false,
+	-- },
 	quickfile = { enabled = true },
 	scope = { enabled = true },
 	-- scroll = { enabled = true },

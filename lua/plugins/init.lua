@@ -10,8 +10,6 @@ require("paq")({
 	"williamboman/mason.nvim",
 	"WhoIsSethDaniel/mason-tool-installer.nvim",
 	"williamboman/mason-lspconfig.nvim",
-	-- luarocks first to install packages
-	"vhyrro/luarocks.nvim",
 
 	"kevinhwang91/nvim-bqf", -- better quickfix list search/replace/prettier
 	{ "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
@@ -78,6 +76,7 @@ require("paq")({
 
 	-- quick fix replacer
 	"gabrielpoca/replacer.nvim",
+	"mistweaverco/kulala.nvim",
 })
 
 vim.cmd("PaqInstall")
@@ -104,5 +103,6 @@ require("plugins.configs.snacks")
 require("plugins.configs.statusbar")
 require("plugins.configs.telescope")
 require("plugins.configs.treesitter")
+require("plugins.configs.kulala")
 
 print("Plugins imported successfully")
