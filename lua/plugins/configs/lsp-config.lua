@@ -27,6 +27,8 @@ setup_lsp_server("templ", {
 	cmd = { "templ", "lsp" },
 })
 
+setup_lsp_server("kulala_ls", {})
+
 setup_lsp_server("ts_ls", {
 	filetypes = { "typescript", "typescriptreact", "javascript" },
 })
