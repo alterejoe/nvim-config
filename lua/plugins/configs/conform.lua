@@ -21,6 +21,10 @@ conform.setup({
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
 		sql = { "sqlfmt" },
+		http = { "kulala-fmt" },
+	},
+	formatters_by_mime = {
+		["text/html"] = { "kulala-fmt" },
 	},
 	filter = function()
 		return true

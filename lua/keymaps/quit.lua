@@ -45,5 +45,5 @@ vim.keymap.set("n", "Q", function()
 	end
 
 	-- Fallback: just quit
-	vim.cmd("q")
+	vim.cmd("q!")
 end, { desc = "Smart buffer close" })
