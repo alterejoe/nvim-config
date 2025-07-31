@@ -99,9 +99,6 @@ dap.configurations.go = {
 		request = "launch",
 		mode = "debug",
 		program = function()
-			-- local cwd = vim.fn.getcwd()
-			-- return "${workspaceFolder}"
-			print("dap_path: ", vim.g.dap_path)
 			return vim.g.dap_path or "./cmd/"
 		end,
 		args = { "-v" },
@@ -168,9 +165,6 @@ dap.configurations.templ = {
 		request = "launch",
 		mode = "debug",
 		program = function()
-			-- local cwd = vim.fn.getcwd()
-			-- return "${workspaceFolder}"
-			print("dap_path: ", vim.g.dap_path)
 			return vim.g.dap_path or "./cmd/"
 		end,
 		args = { "-v" },
@@ -184,9 +178,6 @@ dap.configurations.javascript = {
 		request = "launch",
 		mode = "debug",
 		program = function()
-			-- local cwd = vim.fn.getcwd()
-			-- return "${workspaceFolder}"
-			print("dap_path: ", vim.g.dap_path)
 			return vim.g.dap_path or "./cmd/"
 		end,
 		args = { "-v" },

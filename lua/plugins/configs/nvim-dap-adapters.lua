@@ -3,7 +3,7 @@ local dap = require("dap")
 -- require("dap").defaults.fallback.terminal_win_cmd = "50vsplit new"
 -- vim.fn.sign_define("DapStopped", { text = "🔴", texthl = "Error", linehl = "", numhl = "" })
 
-dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
+-- dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
 
 dap.adapters.dlv_spawn = function(callback)
 	local stdout = vim.loop.new_pipe(false)
