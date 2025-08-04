@@ -77,6 +77,9 @@ require("paq")({
 	-- quick fix replacer
 	"gabrielpoca/replacer.nvim",
 	"mistweaverco/kulala.nvim",
+
+	-- focus
+	"nvim-focus/focus.nvim",
 })
 
 vim.cmd("PaqInstall")
@@ -103,5 +106,6 @@ require("plugins.configs.statusbar")
 require("plugins.configs.telescope")
 require("plugins.configs.treesitter")
 require("plugins.configs.kulala")
+require("plugins.configs.focus")
 
 print("Plugins imported successfully")
