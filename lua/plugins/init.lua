@@ -80,6 +80,8 @@ require("paq")({
 
 	-- focus
 	"nvim-focus/focus.nvim",
+	-- notifier
+	"rcarriga/nvim-notify",
 })
 
 vim.cmd("PaqInstall")

@@ -12,6 +12,8 @@ end, { noremap = true, silent = true })
 
 local patterns = { ".git/", "config.lua", ".env/", "Makefile" }
 
+local juststarting = true
+local notify = require("notify")
 ClosestPattern = function(cwd, times, max)
 	if cwd == "." then
 		print("Reached root dir")
@@ -25,6 +27,9 @@ ClosestPattern = function(cwd, times, max)
 			if file == pattern then
 				vim.fn.chdir(cwd)
 				print("Changed directory to " .. cwd)
+				-- notify
+				notify("Check TODO.md")
+
 				return
 			end
 		end

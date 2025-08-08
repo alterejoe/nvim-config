@@ -1,15 +1,31 @@
 -- user command that runs golangs "air" within the current directory as a toggle
 
+local function clean_lines(lines)
+	local cleaned = {}
+	-- remove ^M
+	for _, line in ipairs(lines) do
+		line = line:gsub("^M", "") -- remove carriage returns
+		table.insert(cleaned, line)
+	end
+	return cleaned
+end
+
 local lines = {}
 local function stdout(_, data, _)
 	for _, line in ipairs(data) do
-		table.insert(lines, line)
+		-- table.insert(lines, line)
+		-- extend
+		for _, l in ipairs(clean_lines({ line })) do
+			table.insert(lines, l)
+		end
 	end
 end
 
 local function stderr(_, data, _)
 	for _, line in ipairs(data) do
-		table.insert(lines, line)
+		for _, l in ipairs(clean_lines({ line })) do
+			table.insert(lines, l)
+		end
 	end
 end
 
@@ -40,13 +56,8 @@ vim.keymap.set("n", "<tab><tab>o", function()
 	if job ~= nil then
 		local bufnr = vim.api.nvim_create_buf(false, true)
 		vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-		vim.api.nvim_open_win(bufnr, true, {
-			relative = "editor",
-			width = 80,
-			height = 10,
-			col = 0,
-			row = 0,
-			border = "single",
-		})
+
+		vim.cmd("vsplit")
+		vim.api.nvim_win_set_buf(0, bufnr)
 	end
 end, { noremap = true, silent = true })
