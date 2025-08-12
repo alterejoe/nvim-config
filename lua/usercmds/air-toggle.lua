@@ -1,63 +1,112 @@
--- user command that runs golangs "air" within the current directory as a toggle
-
-local function clean_lines(lines)
-	local cleaned = {}
-	-- remove ^M
-	for _, line in ipairs(lines) do
-		line = line:gsub("^M", "") -- remove carriage returns
-		table.insert(cleaned, line)
-	end
-	return cleaned
-end
-
+-- live Air runner + log viewer
+local job, bufnr = nil, nil
 local lines = {}
-local function stdout(_, data, _)
-	for _, line in ipairs(data) do
-		-- table.insert(lines, line)
-		-- extend
-		for _, l in ipairs(clean_lines({ line })) do
-			table.insert(lines, l)
+
+local function clean_lines(batch)
+	if not batch then
+		return {}
+	end
+	local out = {}
+	for _, s in ipairs(batch) do
+		if s and s ~= "" then
+			-- true carriage return is "\r"; "^M" is how Vim displays it
+			s = s:gsub("\r", "")
+			table.insert(out, s)
+		end
+	end
+	return out
+end
+
+local function ensure_buf()
+	if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+		return bufnr
+	end
+	bufnr = vim.api.nvim_create_buf(false, true)
+	vim.bo[bufnr].buftype = "nofile"
+	vim.bo[bufnr].bufhidden = "hide"
+	vim.bo[bufnr].swapfile = false
+	vim.bo[bufnr].modifiable = true
+	vim.bo[bufnr].filetype = "log"
+	return bufnr
+end
+
+local function append(data)
+	local chunk = clean_lines(data)
+	if #chunk == 0 then
+		return
+	end
+	for _, l in ipairs(chunk) do
+		table.insert(lines, l)
+	end
+	if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+		local last = vim.api.nvim_buf_line_count(bufnr)
+		vim.api.nvim_buf_set_lines(bufnr, last, last, false, chunk)
+		-- autoscroll if any window shows this buffer
+		for _, win in ipairs(vim.fn.win_findbuf(bufnr)) do
+			pcall(vim.api.nvim_win_set_cursor, win, { vim.api.nvim_buf_line_count(bufnr), 0 })
 		end
 	end
 end
 
-local function stderr(_, data, _)
-	for _, line in ipairs(data) do
-		for _, l in ipairs(clean_lines({ line })) do
-			table.insert(lines, l)
-		end
-	end
+local function on_stdout(_, data, _)
+	vim.schedule(function()
+		append(data)
+	end)
 end
 
-local function stdexit(_, code, _)
-	if code ~= 0 then
-		table.insert(lines, "Job exited with error code: " .. code)
-	else
-		table.insert(lines, "Job completed successfully.")
-	end
+local function on_stderr(_, data, _)
+	vim.schedule(function()
+		append(data)
+	end)
 end
 
-local job = nil
+local function on_exit(_, code, _)
+	vim.schedule(function()
+		append({ ("[air exited with code %d]"):format(code) })
+		job = nil
+	end)
+end
+
+-- Toggle "air"
 vim.keymap.set("n", "<tab><tab>a", function()
-	if job ~= nil then
+	if job then
 		print("stopping air")
-		vim.fn.jobstop(job)
-		lines = {}
+		pcall(vim.fn.jobstop, job)
 		job = nil
 		return
+	end
+
+	print("starting air")
+	lines = {}
+	ensure_buf()
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {}) -- clear
+
+	job = vim.fn.jobstart({ "air" }, {
+		cwd = vim.fn.getcwd(),
+		on_stdout = on_stdout,
+		on_stderr = on_stderr,
+		on_exit = on_exit,
+		stdout_buffered = false,
+		stderr_buffered = false,
+	})
+
+	if job <= 0 then
+		print("failed to start air")
+		job = nil
 	else
-		print("starting air")
-		job =
-			vim.fn.jobstart("air", { cwd = vim.fn.getcwd(), on_stdout = stdout, on_stderr = stderr, on_exit = stdexit })
+		append({ "[air started]" })
 	end
 end, { noremap = true, silent = true })
 
+-- Open/focus live log
 vim.keymap.set("n", "<tab><tab>o", function()
-	if job ~= nil then
-		local bufnr = vim.api.nvim_create_buf(false, true)
-		vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
-
-		vim.cmd("vsplit")
-		vim.api.nvim_win_set_buf(0, bufnr)
+	if not job then
+		return
 	end
+	ensure_buf()
+	-- seed with history
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+	vim.cmd("vsplit")
+	vim.api.nvim_win_set_buf(0, bufnr)
+	vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(bufnr), 0 })
 end, { noremap = true, silent = true })
