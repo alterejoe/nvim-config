@@ -19,6 +19,7 @@ local keymaps_modules = {
 	"keymaps.nvim-dap",
 	"keymaps.lazygit",
 	"keymaps.replacer",
+	"keymaps.resize",
 }
 
 local errors = "Error requiring keymap modules: "

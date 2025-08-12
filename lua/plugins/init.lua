@@ -79,7 +79,7 @@ require("paq")({
 	"mistweaverco/kulala.nvim",
 
 	-- focus
-	"nvim-focus/focus.nvim",
+	-- "nvim-focus/focus.nvim",
 	-- notifier
 	"rcarriga/nvim-notify",
 })
@@ -108,6 +108,6 @@ require("plugins.configs.statusbar")
 require("plugins.configs.telescope")
 require("plugins.configs.treesitter")
 require("plugins.configs.kulala")
-require("plugins.configs.focus")
+-- require("plugins.configs.focus")
 
 print("Plugins imported successfully")
