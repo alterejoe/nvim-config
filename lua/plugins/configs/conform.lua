@@ -1,14 +1,10 @@
-local conform = require("conform")
------prettier------
--- if you want a specific parser for a filetype set it in the .prettierrc file NOT here
--------------------
-
-conform.setup({
+require("conform").setup({
+	-- Map of filetype to formatters
 	formatters_by_ft = {
 		lua = { "stylua" },
 		python = { "black" },
 		-- python = { "pyproject-fmt" },
-		go = { "goimports" },
+		go = { "goimports", "gofmt" },
 		vimwiki = { command = "prettierd", args = { "--markdown-unordered-list-marker", "*" } },
 		-- json = { "jq" },
 		-- javascript = { "biome" },
@@ -22,25 +18,25 @@ conform.setup({
 		gdscript = { "gdformat" },
 		sql = { "sqlfmt" },
 		http = { "kulala-fmt" },
+		css = { "prettierd" },
 	},
-	formatters_by_mime = {
-		["text/html"] = { "kulala-fmt" },
-	},
-	filter = function()
-		return true
-	end,
-	["*"] = { "codespell" },
-	-- -- Use the "_" filetype to run formatters on filetypes that don't
-	-- -- have other formatters configured.
 	format_on_save = {
-		-- These options will be passed to conform.format()
-		timeout_ms = 500,
-		lsp_format = "fallback",
+		timeout_ms = 2500,
+		lsp_fallback = true,
 	},
+	-- -- If this is set, Conform will run the formatter asynchronously after save.
+	-- -- It will pass the table to conform.format().
+	-- -- This can also be a function that returns the table.
+	-- format_after_save = {
+	-- 	lsp_format = "fallback",
+	-- },
+	log_level = vim.log.levels.ERROR,
+	notify_on_error = true,
+	notify_no_formatters = true,
 })
 
-conform.formatters.jsonnetfmt = {
-	options = {
-		args = { "--string-style", "d", "--indent", "4" },
-	},
-}
+-- -- You can set formatters_by_ft and formatters directly
+-- require("conform").formatters_by_ft.lua = { "stylua" }
+-- require("conform").formatters.my_formatter = {
+-- 	command = "my_cmd",
+-- }

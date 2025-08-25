@@ -76,6 +76,15 @@ setup_lsp_server("emmet_language_server", {
 	filetypes = { "html", "templ" },
 })
 
+-- setup_lsp_server("golangci_lint_ls", {
+-- 	filetypes = { "go", "templ" },
+-- 	settings = {
+-- 		templateExtensions = {
+-- 			"templ",
+-- 		},
+-- 	},
+-- })
+--
 setup_lsp_server("gopls", {
 	filetypes = { "go", "templ" },
 	settings = {
