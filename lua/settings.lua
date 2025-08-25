@@ -46,3 +46,7 @@ vim.o.listchars = "tab:>-,trail:."
 
 vim.g.gruvbox_material_enable_italic = true
 vim.g.mapleader = " "
+
+vim.g.hidden = true
+vim.opt.autowriteall = false
+vim.opt.lazyredraw = true

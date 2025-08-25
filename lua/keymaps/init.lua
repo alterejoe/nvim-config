@@ -1,6 +1,7 @@
 local keymaps_modules = {
 	"keymaps.dadbodui",
 	"keymaps.emmet",
+	"keymaps.jump",
 	"keymaps.terminal",
 	"keymaps.neocodeium",
 	"keymaps.everyday",
