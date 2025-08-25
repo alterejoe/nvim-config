@@ -1,4 +1,4 @@
-local plugin_configs = {}
+-- local plugin_configs = {}
 -- local files = vim.fn.readdir(vim.fn.stdpath("config") .. "/lua/configs/") -- this will be for when nvim is in it's normal spot
 -- local files = vim.fn.readdir("/home/altjoe/worktrees/nvim/lua/plugins/configs/")
 
@@ -12,8 +12,8 @@ require("paq")({
 	"williamboman/mason-lspconfig.nvim",
 
 	"kevinhwang91/nvim-bqf", -- better quickfix list search/replace/prettier
-	{ "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
-	-- "monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources}
+	-- { "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
+	"monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources}
 	"sainnhe/gruvbox-material", -- color theme
 	"numToStr/Comment.nvim", -- nicer comments gcc
 	"stevearc/conform.nvim", -- formatter
