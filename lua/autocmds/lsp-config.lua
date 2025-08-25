@@ -33,3 +33,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end, opts)
 	end,
 })
+
+vim.api.nvim_create_autocmd("DirChanged", {
+	callback = function()
+		for _, client in pairs(vim.lsp.get_clients()) do
+			client.stop()
+		end
+		local filetype = vim.api.nvim_buf_get_option(0, "filetype")
+		vim.cmd("LspRestart")
+	end,
+})
