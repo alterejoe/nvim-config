@@ -16,11 +16,11 @@ vim.keymap.set("n", "Q", function()
 		return
 	end
 
-	-- DAP special handling
-	if dap_files[filetype] then
-		CloseDap()
-		return
-	end
+	-- -- DAP special handling
+	-- if dap_files[filetype] then
+	-- 	CloseDap()
+	-- 	return
+	-- end
 
 	-- Close terminals forcefully
 	if buftype == "terminal" then
