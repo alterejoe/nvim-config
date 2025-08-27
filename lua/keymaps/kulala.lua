@@ -24,21 +24,12 @@
 -- 	require("kulala").scratchpad()
 -- end)
 
-vim.keymap.set("n", "<tab>s", function()
+vim.keymap.set("n", "<leader>ks", function()
 	require("kulala").run()
 end)
-vim.keymap.set("n", "<tab>a", function()
+vim.keymap.set("n", "<leader>ka", function()
 	require("kulala").run_all()
 end)
-vim.keymap.set("n", "<tab>o", function()
+vim.keymap.set("n", "<leader>ko", function()
 	require("kulala").open()
-end)
--- ["Manage Auth Config"] = { "u", function() require("lua.kulala.ui.auth_manager").open_auth_config() end, ft = { "http", "rest" }, },
-vim.keymap.set("n", "<tab>A", function()
-	require("kulala.ui.auth_manager").open_auth_config()
-end)
-
--- ["Select environment"] = { "e", function() require("kulala").set_selected_env() end, ft = { "http", "rest" }, },
-vim.keymap.set("n", "<tab>E", function()
-	require("kulala").set_selected_env()
 end)

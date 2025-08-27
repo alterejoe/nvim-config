@@ -15,7 +15,7 @@ local keymaps_modules = {
 	"keymaps.undotree",
 	"keymaps.autoroot",
 	"keymaps.kulala",
-	-- "keymaps.nvim-dap",
+	"keymaps.jump",
 	"keymaps.nvim-dap",
 	"keymaps.lazygit",
 	"keymaps.replacer",

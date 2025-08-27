@@ -1,4 +1,14 @@
+local clearclients = function()
+	local clients = vim.lsp.get_clients()
+	print("Num of lsp clients: " .. #clients)
+	for _, client in pairs(clients) do
+		client.stop()
+		print("Stopped client: " .. client.name)
+	end
+end
+
 vim.keymap.set("n", "<leader>1", function()
+	clearclients()
 	-- this will be a function to set cwd to root ~/
 	vim.fn.chdir("~")
 	print("Changed directory to ~")
@@ -43,6 +53,7 @@ ClosestPattern = function(cwd, times, max)
 end
 
 vim.keymap.set("n", "<leader>2", function()
+	clearclients()
 	-- this will set the cwd to the closest pattern
 	local filepath = vim.api.nvim_buf_get_name(0)
 	local filedir = vim.fn.fnamemodify(filepath, ":h")
@@ -55,6 +66,7 @@ vim.keymap.set("n", "<leader>2", function()
 end, { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>3", function()
+	clearclients()
 	-- this will set the cwd to the closest pattern
 	local filepath = vim.api.nvim_buf_get_name(0)
 	local filedir = vim.fn.fnamemodify(filepath, ":h")
@@ -66,4 +78,16 @@ vim.keymap.set("n", "<leader>3", function()
 	print("Changed directory to " .. filedir)
 end, { noremap = true, silent = true })
 
--- vim.keymap.set("n", "<
+-- up a single dir
+vim.keymap.set("n", "<leader>4", function()
+	clearclients()
+	-- this will set the cwd to the closest pattern
+	local currentdir = vim.fn.getcwd()
+	local uponedir = vim.fn.fnamemodify(currentdir, ":h")
+	print("filedir: ", uponedir)
+	if string.find(uponedir, "oil://") then
+		uponedir = string.gsub(uponedir, "oil://", "")
+	end
+	vim.fn.chdir(uponedir)
+	print("Changed directory to " .. uponedir)
+end, { noremap = true, silent = true })

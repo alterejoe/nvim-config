@@ -6,10 +6,13 @@ local capabilities = vim.tbl_deep_extend(
 	require("cmp_nvim_lsp").default_capabilities()
 )
 
+local listofservernames = {}
 local function setup_lsp_server(server_name, config)
 	lspconfig[server_name].setup(vim.tbl_deep_extend("force", {
 		capabilities = capabilities,
 	}, config))
+
+	table.insert(listofservernames, server_name)
 end
 
 local function add_file_type(filetype, ext)
@@ -76,15 +79,6 @@ setup_lsp_server("emmet_language_server", {
 	filetypes = { "html", "templ" },
 })
 
--- setup_lsp_server("golangci_lint_ls", {
--- 	filetypes = { "go", "templ" },
--- 	settings = {
--- 		templateExtensions = {
--- 			"templ",
--- 		},
--- 	},
--- })
---
 setup_lsp_server("gopls", {
 	filetypes = { "go", "templ" },
 	settings = {
@@ -93,7 +87,8 @@ setup_lsp_server("gopls", {
 		},
 	},
 })
-
 setup_lsp_server("marksman", {
 	filetypes = { "markdown" },
 })
+
+vim.lsp.enable(listofservernames)

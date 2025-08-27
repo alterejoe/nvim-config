@@ -68,7 +68,7 @@ local function on_exit(_, code, _)
 end
 
 -- Toggle "air"
-vim.keymap.set("n", "<tab><tab>a", function()
+vim.keymap.set("n", "<leader>ra", function()
 	if job then
 		print("stopping air")
 		pcall(vim.fn.jobstop, job)
@@ -99,7 +99,7 @@ vim.keymap.set("n", "<tab><tab>a", function()
 end, { noremap = true, silent = true })
 
 -- Open/focus live log
-vim.keymap.set("n", "<tab><tab>o", function()
+vim.keymap.set("n", "<leader>ro", function()
 	if not job then
 		return
 	end
