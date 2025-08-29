@@ -10,17 +10,33 @@ vim.keymap.set("n", "Q", function()
 		dapui_scopes = true,
 	}
 
-	-- Close specific output buffer
-	if bufname == "output" then
-		vim.api.nvim_buf_delete(buf, { force = true })
-		return
-	end
+	local buftodelete = { "output" }
+	local typestodelete = { "kulala://ui" }
 
-	-- -- DAP special handling
-	-- if dap_files[filetype] then
-	-- 	CloseDap()
+	-- -- Close specific output buffer
+	-- if bufname == "output" then
+	-- 	vim.api.nvim_buf_delete(buf, { force = true })
 	-- 	return
 	-- end
+	--
+	-- if filetype == " kulala://ui " then
+	-- 	vim.api.nvim_buf_delete(buf, { force = true })
+	-- 	return
+	-- end
+
+	for _, v in pairs(buftodelete) do
+		if bufname == v then
+			vim.api.nvim_buf_delete(buf, { force = true })
+			return
+		end
+	end
+
+	for _, v in pairs(typestodelete) do
+		if filetype == v then
+			vim.api.nvim_buf_delete(buf, { force = true })
+			return
+		end
+	end
 
 	-- Close terminals forcefully
 	if buftype == "terminal" then

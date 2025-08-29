@@ -150,7 +150,7 @@ setup_lsp_server("tailwindcss", {
 	},
 })
 
-setup_lsp_server("sqlls", {
+setup_lsp_server("postgres_lsp", {
 	filetypes = { "sql" },
 })
 
@@ -166,17 +166,3 @@ setup_lsp_server("gopls", {
 setup_lsp_server("marksman", {
 	filetypes = { "markdown" },
 })
-
--- -- ---------- safety net: re-try attach when buffers are entered ----------
--- vim.api.nvim_create_autocmd("BufEnter", {
--- 	desc = "Re-try LSP attach per buffer (useful after :cd)",
--- 	callback = function(args)
--- 		local name2cfg = require("lspconfig.configs")
--- 		for name, _ in pairs(name2cfg) do
--- 			local manager = lspconfig[name] and lspconfig[name].manager
--- 			if manager then
--- 				manager.try_add(args.buf)
--- 			end
--- 		end
--- 	end,
--- })

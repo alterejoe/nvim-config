@@ -16,7 +16,7 @@ require("conform").setup({
 		typescript = { "prettierd" },
 		html = { "prettierd" },
 		gdscript = { "gdformat" },
-		sql = { "sqlfmt" },
+		sql = { "pg_format" },
 		http = { "kulala-fmt" },
 		css = { "prettierd" },
 	},
