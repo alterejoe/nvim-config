@@ -9,7 +9,7 @@ require("conform").setup({
 		-- json = { "jq" },
 		-- javascript = { "biome" },
 		javascript = { "biome" },
-		templ = { command = { "templ", "fmt", "." } },
+		templ = { "templ" },
 		-- template = { "gohtml" },
 		-- template = { "prettierd" },
 		json = { "prettierd" },
