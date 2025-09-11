@@ -28,7 +28,6 @@ ClosestPattern = function(cwd, times, max)
 				vim.fn.chdir(cwd)
 				print("Changed directory to " .. cwd)
 				-- notify
-				notify("Check TODO.md")
 
 				return
 			end

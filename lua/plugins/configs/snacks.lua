@@ -18,8 +18,8 @@ snacks.setup({
 	-- 	top_down = false,
 	-- },
 	quickfile = { enabled = true },
-	scope = { enabled = true },
-	-- scroll = { enabled = true },
+	-- scope = { enabled = true },
+	-- -- scroll = { enabled = true },
 	-- statuscolumn = { enabled = true },
 	-- words = { enabled = true },
 })
