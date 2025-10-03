@@ -8,6 +8,7 @@ dap.configurations.python = {
 		pythonPath = function()
 			SourceConfig()
 			local pythonpath = vim.g.python3_host_prog or "/home/altjoe/miniconda3/bin/python"
+			print("Python path: " .. pythonpath)
 			return pythonpath
 		end,
 	},

@@ -82,6 +82,8 @@ require("paq")({
 	-- "nvim-focus/focus.nvim",
 	-- notifier
 	"rcarriga/nvim-notify",
+	-- git worktree
+	"ThePrimeagen/git-worktree.nvim",
 })
 
 vim.cmd("PaqInstall")

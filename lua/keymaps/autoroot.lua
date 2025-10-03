@@ -78,3 +78,36 @@ vim.keymap.set("n", "<leader>4", function()
 	vim.fn.chdir(uponedir)
 	print("Changed directory to " .. uponedir)
 end, { noremap = true, silent = true })
+
+-- leader 5: root to project root (where go.work lives)
+vim.keymap.set("n", "<leader>5", function()
+	local filepath = vim.api.nvim_buf_get_name(0)
+	local filedir = vim.fn.fnamemodify(filepath, ":h")
+	if string.find(filedir, "oil://") then
+		filedir = string.gsub(filedir, "oil://", "")
+	end
+
+	local function rootToGoWork(cwd, depth, max)
+		if cwd == "." then
+			print("Reached root dir, no go.work found")
+			return
+		end
+		local files = vim.fn.readdir(cwd)
+		for _, file in ipairs(files) do
+			if file == "go.work" then
+				vim.fn.chdir(cwd)
+				print("Changed directory to project root: " .. cwd)
+				return true
+			end
+		end
+		if depth >= max then
+			return
+		end
+		local parent = vim.fn.fnamemodify(cwd, ":h")
+		return rootToGoWork(parent, depth + 1, max)
+	end
+
+	if not rootToGoWork(filedir, 0, 10) then
+		print("No go.work found up the tree")
+	end
+end, { noremap = true, silent = true })
