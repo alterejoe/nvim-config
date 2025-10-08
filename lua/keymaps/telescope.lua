@@ -20,7 +20,7 @@ vim.keymap.set("n", "<leader>ff", function()
 end, { desc = "Telescope pick a file" })
 
 vim.keymap.set("n", "<leader>fg", function()
-	telescope.extensions.egrepify.egrepify({ cwd = vim.fn.getcwd(), qflist = true })
+	telescope.extensions.egrepify.egrepify({ cwd = vim.fn.getcwd() })
 end, { desc = "Telescope live grep" })
 
 vim.keymap.set("n", "<leader>fG", function()

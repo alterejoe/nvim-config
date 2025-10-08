@@ -94,7 +94,7 @@ vim.keymap.set("n", "<leader>5", function()
 		end
 		local files = vim.fn.readdir(cwd)
 		for _, file in ipairs(files) do
-			if file == "go.work" then
+			if file == "go.work" or file == "root.lua" then
 				vim.fn.chdir(cwd)
 				print("Changed directory to project root: " .. cwd)
 				return true

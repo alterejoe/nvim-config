@@ -19,6 +19,7 @@ require("conform").setup({
 		sql = { "pg_format" },
 		-- http = { "kulala-fmt" },
 		css = { "prettierd" },
+		yaml = { "yamlfix" },
 	},
 	format_on_save = {
 		timeout_ms = 2500,
