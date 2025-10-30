@@ -10,6 +10,7 @@ require("conform").setup({
 		-- javascript = { "biome" },
 		javascript = { "biome" },
 		templ = { "templ", "goimports" },
+		tmpl = {},
 		-- template = { "gohtml" },
 		-- template = { "prettierd" },
 		json = { "prettierd" },
@@ -19,7 +20,7 @@ require("conform").setup({
 		sql = { "pg_format" },
 		-- http = { "kulala-fmt" },
 		css = { "prettierd" },
-		yaml = { "yamlfix" },
+		yaml = { "prettierd" },
 	},
 	format_on_save = {
 		timeout_ms = 2500,

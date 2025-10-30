@@ -166,3 +166,7 @@ setup_lsp_server("gopls", {
 setup_lsp_server("marksman", {
 	filetypes = { "markdown" },
 })
+
+setup_lsp_server("terraformls", {
+	filetypes = { "terraform", "tf" },
+})

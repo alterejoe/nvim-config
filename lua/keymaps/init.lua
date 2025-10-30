@@ -4,6 +4,7 @@ local keymaps_modules = {
 	"keymaps.terminal",
 	"keymaps.neocodeium",
 	"keymaps.everyday",
+	"keymaps.rm-m",
 	"keymaps.write",
 	"keymaps.notes",
 	"keymaps.nvim-cmp",
