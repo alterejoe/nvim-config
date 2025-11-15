@@ -58,3 +58,9 @@ end, { desc = "Telescope grep visual selection" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
 
 vim.keymap.set("n", "<leader>fp", builtin.pickers, { desc = "Telescope resume" })
+
+vim.keymap.set("n", "<leader>fr", function()
+	require("telescope").extensions.frecency.frecency({
+		cwd = vim.fn.getcwd(),
+	})
+end, { desc = "Frecency (better recent files)" })
