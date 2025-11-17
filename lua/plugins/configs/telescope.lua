@@ -36,12 +36,10 @@ telescope.setup({
 		cache_picker = {
 			num_pickers = 3,
 		},
-
 		layout_strategy = "bottom_pane",
 		layout_config = {
-			height = 0.35,
+			height = 0.25, -- smaller so more of your screen remains visible
 		},
-		border = true,
 	},
 })
 -- To get fzf loaded and working with telescope, you need to call
