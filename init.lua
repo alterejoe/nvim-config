@@ -13,8 +13,8 @@ vim.diagnostic.config({
 
 require("settings")
 require("plugins")
+require("keymaps")
 require("autocmds")
 require("usercmds")
-require("keymaps")
 
 -- defer fn

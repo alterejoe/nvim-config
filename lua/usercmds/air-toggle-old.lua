@@ -1,6 +1,5 @@
 -- live Air runner + log viewer (multi-project safe)
 local sessions = {} -- key = cwd: { job, bufnr, lines }
-local MAX_LINES = 150
 
 local function get_session()
 	local cwd = vim.fn.getcwd()
@@ -43,22 +42,8 @@ local function append(session, data)
 		return
 	end
 
-	-- Add new lines + cap to MAX_LINES
 	for _, l in ipairs(chunk) do
 		table.insert(session.lines, l)
-	end
-	local excess = #session.lines - MAX_LINES
-	if excess > 0 then
-		-- remove oldest lines
-		for i = 1, excess do
-			session.lines[i] = nil
-		end
-		-- compact table
-		local new = {}
-		for _, v in ipairs(session.lines) do
-			table.insert(new, v)
-		end
-		session.lines = new
 	end
 
 	if session.bufnr and vim.api.nvim_buf_is_valid(session.bufnr) then
