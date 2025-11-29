@@ -21,6 +21,7 @@ require("conform").setup({
 		-- http = { "kulala-fmt" },
 		css = { "prettierd" },
 		yaml = { "prettierd" },
+		toml = { "taplo" },
 	},
 	format_on_save = {
 		timeout_ms = 2500,
