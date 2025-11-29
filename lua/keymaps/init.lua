@@ -13,6 +13,10 @@ local keymaps_modules = {
 	"keymaps.quit",
 	"keymaps.telescope",
 	"keymaps.lsp-config",
+	"keymaps.oil",
+	"keymaps.paste-wout-copy",
+	"keymaps.resethighlight",
+	"keymaps.yank-tree",
 	"keymaps.undotree",
 	"keymaps.autoroot",
 	"keymaps.kulala",
@@ -21,6 +25,7 @@ local keymaps_modules = {
 	"keymaps.lazygit",
 	"keymaps.replacer",
 	"keymaps.resize",
+	"keymaps.go-tasks",
 }
 
 local errors = "Error requiring keymap modules: "

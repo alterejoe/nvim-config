@@ -92,6 +92,7 @@ vim.cmd("PaqInstall")
 require("plugins.configs.mason")
 require("plugins.configs.luarocks")
 require("plugins.configs.colorscheme")
+require("plugins.configs.go-tasks")
 
 require("plugins.configs.luasnip")
 require("plugins.configs.bqf")

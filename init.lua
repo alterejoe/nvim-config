@@ -10,11 +10,16 @@ end
 vim.diagnostic.config({
 	virtual_text = true,
 })
+vim.o.foldenable = false
+vim.o.foldmethod = "manual"
+vim.o.foldlevel = 999
+vim.o.foldlevelstart = 999
+vim.o.foldcolumn = "0"
 
 require("settings")
 require("plugins")
 require("keymaps")
 require("autocmds")
-require("usercmds")
+-- require("usercmds")
 
 -- defer fn
