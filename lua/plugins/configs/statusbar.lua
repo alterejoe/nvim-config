@@ -1,15 +1,15 @@
--- Active/Inactive colors
+-- Modern color scheme with better visibility
 local hl_active = {
-	cwd = { fg = "black", bg = "green", style = "bold" },
-	root = { fg = "black", bg = "magenta", style = "bold" },
-	file = { fg = "white", bg = "blue", style = "bold" },
-	gowork = { fg = "black", bg = "yellow", style = "bold" },
+	cwd = { fg = "#1e293b", bg = "#93c5fd", style = "bold" },
+	root = { fg = "#1e293b", bg = "#c4b5fd", style = "NONE" },
+	file = { fg = "#1e293b", bg = "#6ee7b7", style = "bold" },
+	gowork = { fg = "#1e293b", bg = "#fde047", style = "NONE" },
 }
 local hl_inactive = {
-	cwd = { fg = "#444444", bg = "#222222" },
-	root = { fg = "#555555", bg = "#222233" },
-	file = { fg = "#666666", bg = "#333333" },
-	gowork = { fg = "#444444", bg = "#222200" },
+	cwd = { fg = "#6b7280", bg = "#374151" },
+	root = { fg = "#6b7280", bg = "#374151" },
+	file = { fg = "#6b7280", bg = "#374151" },
+	gowork = { fg = "#6b7280", bg = "#374151" },
 }
 
 local function hl_pick(a, b)
@@ -20,11 +20,7 @@ end
 
 -- Find "project root" for the *open buffer*
 -- Rule: nearest parent containing `cmd/` or `config.lua`
--- Find "project root" for the *open buffer*
--- Rule: nearest parent containing `cmd/` or `config.lua`
 local function find_buffer_root(filepath, is_directory)
-	-- If filepath is already a directory (oil buffer), start from it
-	-- Otherwise, get the file's directory
 	local dir = is_directory and filepath or vim.fn.fnamemodify(filepath, ":h")
 
 	while dir ~= "/" do
@@ -64,37 +60,39 @@ local function find_go_work_root(start)
 	return nil
 end
 
+-- Modern separators with icons
+local sep_style = {
+	left = " ",
+	right = " ",
+}
+
 -- Components used for BOTH active + inactive
 local left_components = {
 	-- 1. CWD - just the folder name
 	{
 		provider = function()
-			return vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+			return " 󰉋 " .. vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
 		end,
 		hl = function()
 			return hl_pick(hl_active.cwd, hl_inactive.cwd)
 		end,
-		left_sep = "block",
-		right_sep = "block",
+		left_sep = sep_style.left,
+		right_sep = sep_style.right,
 	},
 	-- 2. Path from CWD to buffer's project root
 	{
 		provider = function()
 			local buf_path
 			if vim.bo.filetype == "oil" then
-				-- Oil buffers have names like "oil:///path/to/dir"
-				-- Get the actual directory path
 				buf_path = vim.fn.expand("%"):gsub("^oil://", "")
 			else
 				buf_path = vim.fn.expand("%:p")
 			end
 
-			-- Guard against empty/invalid paths
 			if buf_path == "" or buf_path == "about:blank" then
 				return ""
 			end
 
-			-- For oil, buf_path is already a directory; for files, we need the parent
 			local is_oil = vim.bo.filetype == "oil"
 			local root = find_buffer_root(buf_path, is_oil)
 			if not root then
@@ -102,38 +100,42 @@ local left_components = {
 			end
 
 			local cwd = vim.fn.getcwd()
-			-- Ensure both paths end without trailing slash for comparison
 			cwd = cwd:gsub("/$", "")
 			root = root:gsub("/$", "")
 
-			-- If root is under cwd, show relative path
+			local result
 			if vim.startswith(root, cwd .. "/") then
-				return root:sub(#cwd + 2) -- +2 to skip cwd and the /
+				result = root:sub(#cwd + 2)
 			elseif root == cwd then
-				return "." -- Root is the cwd itself
+				result = "."
 			else
-				-- Root is outside cwd, just show the folder name
-				return vim.fn.fnamemodify(root, ":t")
+				result = vim.fn.fnamemodify(root, ":t")
 			end
+
+			return result ~= "" and ("  " .. result) or ""
 		end,
 		hl = function()
 			return hl_pick(hl_active.root, hl_inactive.root)
 		end,
-		left_sep = "block",
-		right_sep = "block",
+		left_sep = sep_style.left,
+		right_sep = sep_style.right,
 	},
+	-- 3. Current file
 	{
 		provider = function()
+			local filename
 			if vim.bo.filetype == "oil" then
-				return vim.fn.fnamemodify(vim.fn.expand("%:p:h"), ":t")
+				filename = vim.fn.fnamemodify(vim.fn.expand("%:p:h"), ":t")
+			else
+				filename = vim.fn.expand("%:t")
 			end
-			return vim.fn.expand("%:t")
+			return filename ~= "" and ("  " .. filename) or ""
 		end,
 		hl = function()
 			return hl_pick(hl_active.file, hl_inactive.file)
 		end,
-		left_sep = "block",
-		right_sep = "block",
+		left_sep = sep_style.left,
+		right_sep = sep_style.right,
 	},
 }
 
@@ -142,13 +144,13 @@ local right_components = {
 	{
 		provider = function()
 			local root = find_go_work_root(vim.fn.getcwd())
-			return root and (vim.fn.fnamemodify(root, ":t") .. " (go.work)") or ""
+			return root and (" 󰟓 " .. vim.fn.fnamemodify(root, ":t") .. " ") or ""
 		end,
 		hl = function()
 			return hl_pick(hl_active.gowork, hl_inactive.gowork)
 		end,
-		left_sep = "block",
-		right_sep = "block",
+		left_sep = sep_style.left,
+		right_sep = sep_style.right,
 	},
 }
 
@@ -156,5 +158,10 @@ require("feline").setup({
 	components = {
 		active = { left_components, {}, right_components },
 		inactive = { left_components, {}, right_components },
+	},
+	force_inactive = {
+		filetypes = {},
+		buftypes = {},
+		bufnames = {},
 	},
 })
