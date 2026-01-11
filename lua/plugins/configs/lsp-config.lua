@@ -24,7 +24,7 @@ end
 local ROOT = {
 	gopls = function(fname)
 		-- go.work > go.mod > git > cwd
-		return cwd_fallback(fname, { "go.work", "go.mod" })
+		return cwd_fallback(fname, { "go.work", ".git", "go.mod" })
 	end,
 
 	ts_ls = function(fname)

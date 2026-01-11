@@ -15,7 +15,11 @@ require("paq")({
 	-- { "monkoose/neocodeium", commit = "854b42c" }, -- neocodium for project context chat/suggesions from multiple model sources
 	"monkoose/neocodeium", -- neocodium for project context chat/suggesions from multiple model sources}
 	"sainnhe/gruvbox-material", -- color theme
-	"numToStr/Comment.nvim", -- nicer comments gcc
+
+	-- comment.nvim
+	"JoosepAlviste/nvim-ts-context-commentstring", -- treesitter aware comments
+	"numToStr/Comment.nvim",
+
 	"stevearc/conform.nvim", -- formatter
 	--
 	-- dadbodui
@@ -89,6 +93,7 @@ require("paq")({
 vim.cmd("PaqInstall")
 
 -- require package installation first
+require("plugins.configs.comment")
 require("plugins.configs.mason")
 require("plugins.configs.luarocks")
 require("plugins.configs.colorscheme")
