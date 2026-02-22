@@ -23,10 +23,14 @@ require("conform").setup({
 		yaml = { "prettierd" },
 		toml = { "taplo" },
 	},
-	format_on_save = {
-		timeout_ms = 2500,
-		lsp_fallback = true,
-	},
+	format_on_save = function(bufnr)
+		-- Check if autoformat is disabled for this buffer
+		if vim.b[bufnr].disable_autoformat then
+			return
+		end
+
+		return { timeout_ms = 500, lsp_fallback = true }
+	end,
 	-- -- If this is set, Conform will run the formatter asynchronously after save.
 	-- -- It will pass the table to conform.format().
 	-- -- This can also be a function that returns the table.

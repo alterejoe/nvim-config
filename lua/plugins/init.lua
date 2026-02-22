@@ -6,6 +6,7 @@
 require("paq")({
 	"savq/paq-nvim", -- Let Paq manage itself
 
+	"coder/claudecode.nvim",
 	-- mason first to install packages
 	"williamboman/mason.nvim",
 	"WhoIsSethDaniel/mason-tool-installer.nvim",

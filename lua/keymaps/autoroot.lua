@@ -10,7 +10,7 @@ vim.keymap.set("n", "<leader>!", function()
 	print("Changed directory to ~")
 end, { noremap = true, silent = true })
 
-local patterns = { ".git", "config.lua", ".env", "Makefile" }
+local patterns = { ".git", "config.lua", ".env", "Makefile", "go.mod" }
 
 local juststarting = true
 local notify = require("notify")

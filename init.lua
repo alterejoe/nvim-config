@@ -20,6 +20,7 @@ require("settings")
 require("plugins")
 require("keymaps")
 require("autocmds")
+require("snippets")
 -- require("usercmds")
 
 -- defer fn

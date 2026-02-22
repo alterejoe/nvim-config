@@ -37,7 +37,7 @@ end
 
 -- Kill all dev processes using Taskfile clean
 local function cleanup_processes()
-	vim.fn.system("task clean 2>/dev/null")
+	vim.fn.system("task clean ")
 end
 
 -- PUBLIC: open log buffer in a split (or jump to it if already visible)
@@ -84,7 +84,6 @@ function M.toggle_task()
 			vim.notify("Stopped: task dev (cleaned up all processes)")
 		end, 100)
 		job = nil
-		return
 	end
 
 	-- Clean up any lingering processes before starting
